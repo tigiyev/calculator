@@ -1,16 +1,17 @@
 "use strict"
 
 document.addEventListener("DOMContentLoaded", (e) => {
-	// console.log("loaded");
-	// debugger
 
 	let a
 	let b
 	let operator
+	let answer
 
-	let display = []
+	let displayAr = []
+	let displayStr = ''
 	let displayEl = document.querySelector(".calc__display__content")
 	let displayPreviewEl = document.querySelector(".calc__display__preview")
+
 
 	function add(a, b) {
 		return a + b
@@ -26,10 +27,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		return a / b
 	}
 
-	// console.log(subtract(4, 2));
 
-
-	function operate(a, b, operator) {
+	function operate(operator, a, b) {
 		// debugger
 
 		// make a and b numbers
@@ -60,28 +59,42 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	}
 
 
-	// create event listener for each button
-	// update variables a, b, operator depending 
-	// on what button is pressed
-
-	let numbers = document.querySelectorAll("[calc-number]")
+	let numbers = document.querySelectorAll("[calc-digit]")
 	let operators = document.querySelectorAll("[calc-operator]")
-	let equal = document.querySelector("[calc-equal]")
+	let equal = document.querySelector("[calc-role='equal']")
 	let clear = document.querySelector("[calc-role='clear']")
 
 
+	let displayIsClear = false
+
 	numbers.forEach(e => {
-		// console.log(e);
 		e.addEventListener('click', () => {
-			updateDisplay(e.getAttribute("calc-number"))
+
+			if (operator && !displayIsClear) {
+				clearDisplay()
+				displayIsClear = true
+			}
+
+			// displayIsClear = false
+
+			updateDisplay(e.getAttribute("calc-digit"))
+
+			console.log("a: ", a);
+			console.log("b: ", b);
+			console.log("operator: ", operator);
+			console.log("answer: ", answer);
+			console.log("displayAr: ", displayAr);
+			console.log("displayStr: ", displayStr);
+			console.log("displayIsClear: ", displayIsClear);
 		})
 	})
 
 	function updateDisplay(number) {
 		// push number pressed in array
 		// join array and update display
-		display.push(number)
-		displayEl.innerHTML = display.join("")
+		displayAr.push(number)
+		displayStr = displayAr.join("")
+		displayEl.innerHTML = displayStr
 
 		// place a, b and operator in preview
 
@@ -89,41 +102,44 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		// add tousand separator later
 	}
 
-	function updatePreview() {
+	// function updatePreview() {
 
-		// place a, b and operator in preview
-		let ar = []
-		if (a) {
-			ar.push(a.toString())
-		}
-		if (operator) {
-			switch (operator) {
-				case "add": ar.push("+")
-					break;
-				case "subtract": ar.push("-")
-					break;
-				case "multiply": ar.push("×")
-					break;
-				case "division": ar.push("÷")
-					break;
-			}
-		}
-		if (b) {
-			ar.push(b.toString())
-		}
-		displayPreviewEl.innerHTML = ar.join(" ")
+	// 	// place a, b and operator in preview
+	// 	let ar = []
+	// 	if (a) {
+	// 		ar.push(a.toString())
+	// 	}
+	// 	if (operator) {
+	// 		switch (operator) {
+	// 			case "add": ar.push("+")
+	// 				break;
+	// 			case "subtract": ar.push("-")
+	// 				break;
+	// 			case "multiply": ar.push("×")
+	// 				break;
+	// 			case "division": ar.push("÷")
+	// 				break;
+	// 		}
+	// 	}
+	// 	if (b) {
+	// 		ar.push(b.toString())
+	// 	}
+	// 	displayPreviewEl.innerHTML = ar.join(" ")
 
-	}
+	// }
 
 
 	operators.forEach(e => {
 		e.addEventListener('click', () => {
 
+			displayIsClear = false
 			updateOperands()
 
-			// clear display and display array
-			displayEl.innerHTML = ""
-			display = []
+
+			// clearDisplay()
+
+
+
 
 
 			// update operator
@@ -138,59 +154,92 @@ document.addEventListener("DOMContentLoaded", (e) => {
 					break
 			}
 
-			updatePreview()
+			console.log("a: ", a);
+			console.log("b: ", b);
+			console.log("operator: ", operator);
+			console.log("answer: ", answer);
+			console.log("displayAr: ", displayAr);
+			console.log("displayStr: ", displayStr);
+			console.log("displayIsClear: ", displayIsClear);
+			// updatePreview()
 
 		})
 	})
 
 	function updateOperands() {
-		// update a
 		if (a === "" || a === undefined) {
-			a = displayEl.innerHTML
-
-			console.log("a: ", a);
+			// a = displayEl.innerHTML
+			a = displayStr
+			// console.log("a: ", a);
 		}
-		// update b
 		else {
-			b = displayEl.innerHTML
-
-			console.log("b: ", b);
+			b = displayStr
+			// console.log("b: ", b);
 		}
+	}
+
+	function clearDisplay() {
+		displayEl.innerHTML = ""
+		displayAr = []
+		displayStr = ''
+		displayIsClear = true
 	}
 
 
 	equal.addEventListener("click", () => {
+
+		// displayIsClear = false
 
 		updateOperands()
 
 		console.log("a: ", a);
 		console.log("b: ", b);
 		console.log("operator: ", operator);
+		console.log("answer: ", answer);
+		console.log("displayAr: ", displayAr);
+		console.log("displayStr: ", displayStr);
+		console.log("displayIsClear: ", displayIsClear);
 
 
-		let answer = operate(a, b, operator)
+		answer = operate(operator, a, b)
 		console.log(answer);
 
-		// update display and display array
-		displayEl.innerHTML = answer
+		if (answer) {
+			// update display and display array
+			displayEl.innerHTML = answer
 
-		display = answer.toString().split("")
-		console.log(display);
+			displayAr = answer.toString().split("")
+			console.log(displayAr);
+		}
 
 
+		// clear a, b , answer stays as a
+		a = answer
+		b = undefined
+		answer = undefined
+		// displayIsClear = false
 
+		// clear display
+		// displayEl.innerHTML = ""
+		// display = []
 
-		// clear a, b
-		a = undefined, b = undefined
+		// clearDisplay()
+
+		// add = in preview display
+		// updatePreview()
 	})
 
 
 	clear.addEventListener("click", () => {
 		a = undefined
 		b = undefined
+		displayAr = []
+		displayStr = ''
 		displayEl.innerHTML = ""
-		display = []
-		displayPreviewEl.innerHTML = ""
+		displayIsClear = false
+		// displayPreviewEl.innerHTML = ""
 	})
 
 })
+
+// how to clear display after first digit
