@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let operator
 	let answer
 
-	let displayAr = []
-	let displayStr = ''
+	let displayAr = ['0']
+	let displayStr = '0'
 	let displayEl = document.querySelector(".calc__display__content")
 	let displayPreviewEl = document.querySelector(".calc__display__preview")
 
@@ -65,19 +65,19 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let clear = document.querySelector("[calc-role='clear']")
 
 
-	let displayIsClear = false
+
+	let firstInputAfterOperator = false
 
 	numbers.forEach(e => {
 		e.addEventListener('click', () => {
 
-			if (operator && !displayIsClear) {
+			if (firstInputAfterOperator) {
 				clearDisplay()
-				displayIsClear = true
+				firstInputAfterOperator = false
 			}
 
-			// displayIsClear = false
-
 			updateDisplay(e.getAttribute("calc-digit"))
+			// updateOperands()
 
 			console.log("a: ", a);
 			console.log("b: ", b);
@@ -85,16 +85,137 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			console.log("answer: ", answer);
 			console.log("displayAr: ", displayAr);
 			console.log("displayStr: ", displayStr);
-			console.log("displayIsClear: ", displayIsClear);
+			console.log("firstInputAfterOperator: ", firstInputAfterOperator);
+			console.log("--------------------------");
+
+
 		})
 	})
 
+	operators.forEach(e => {
+		e.addEventListener('click', () => {
+
+			firstInputAfterOperator = true
+
+			updateOperands()
+
+			// update operator
+			switch (e.getAttribute("calc-operator")) {
+				case "division": operator = "division"
+					break
+				case "multiply": operator = "multiply"
+					break
+				case "subtract": operator = "subtract"
+					break
+				case "add": operator = "add"
+					break
+			}
+
+			if (a && b && operator) {
+				// debugger
+				answer = operate(operator, a, b)
+				a = answer
+				b = undefined
+				answer = undefined
+
+				displayEl.innerHTML = a
+				displayAr = a.toString().split("")
+			}
+
+			console.log("a: ", a);
+			console.log("b: ", b);
+			console.log("operator: ", operator);
+			console.log("answer: ", answer);
+			console.log("displayAr: ", displayAr);
+			console.log("displayStr: ", displayStr);
+			console.log("firstInputAfterOperator: ", firstInputAfterOperator);
+			console.log("--------------------------");
+
+			// updatePreview()
+
+		})
+	})
+
+	equal.addEventListener("click", () => {
+
+		firstInputAfterOperator = true
+
+		updateOperands()
+
+		answer = operate(operator, a, b)
+		// debugger
+
+		// if (answer) {
+		// update display and display array
+		displayEl.innerHTML = answer
+		displayAr = answer.toString().split("")
+		// }
+
+		console.log("a: ", a);
+		console.log("b: ", b);
+		console.log("operator: ", operator);
+		console.log("answer: ", answer);
+		console.log("displayAr: ", displayAr);
+		console.log("displayStr: ", displayStr);
+		console.log("--------------------------");
+
+
+		// clear a, b , answer stays as a
+		a = answer
+		b = undefined
+		// operator = undefined
+		answer = undefined
+
+		console.log("a: ", a);
+		console.log("b: ", b);
+		console.log("operator: ", operator);
+		console.log("answer: ", answer);
+		console.log("--------------------------");
+
+		// updatePreview()
+	})
+
+	clear.addEventListener("click", () => {
+		a = undefined
+		b = undefined
+		operator = undefined
+		answer = undefined
+		displayAr = ['0']
+		displayStr = '0'
+		displayEl.innerHTML = ""
+		firstInputAfterOperator = false
+
+		console.log("a: ", a);
+		console.log("b: ", b);
+		console.log("operator: ", operator);
+		console.log("answer: ", answer);
+		console.log("displayAr: ", displayAr);
+		console.log("displayStr: ", displayStr);
+		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
+		console.log("--------------------------");
+	})
+
 	function updateDisplay(number) {
-		// push number pressed in array
-		// join array and update display
-		displayAr.push(number)
-		displayStr = displayAr.join("")
-		displayEl.innerHTML = displayStr
+
+		// console.log("number: ", number);
+
+		// prevents display showing 00000
+		// delete default 0 if next number is else than 0 
+		// if answer is 0 show it in display
+		if (displayAr[0] == "0" && displayAr.length == 1 && number == "0") {
+			return
+		} else if (displayAr[0] == "0" && displayAr.length == 1) {
+			displayAr = []
+
+			displayAr.push(number)
+			displayStr = displayAr.join("")
+			displayEl.innerHTML = displayStr
+		} else {
+			displayAr.push(number)
+			displayStr = displayAr.join("")
+			displayEl.innerHTML = displayStr
+		}
+
 
 		// place a, b and operator in preview
 
@@ -129,52 +250,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	// }
 
 
-	operators.forEach(e => {
-		e.addEventListener('click', () => {
 
-			displayIsClear = false
-			updateOperands()
-
-
-			// clearDisplay()
-
-
-
-
-
-			// update operator
-			switch (e.getAttribute("calc-operator")) {
-				case "division": operator = "division"
-					break
-				case "multiply": operator = "multiply"
-					break
-				case "subtract": operator = "subtract"
-					break
-				case "add": operator = "add"
-					break
-			}
-
-			console.log("a: ", a);
-			console.log("b: ", b);
-			console.log("operator: ", operator);
-			console.log("answer: ", answer);
-			console.log("displayAr: ", displayAr);
-			console.log("displayStr: ", displayStr);
-			console.log("displayIsClear: ", displayIsClear);
-			// updatePreview()
-
-		})
-	})
 
 	function updateOperands() {
 		if (a === "" || a === undefined) {
-			// a = displayEl.innerHTML
 			a = displayStr
-			// console.log("a: ", a);
 		}
 		else {
 			b = displayStr
-			// console.log("b: ", b);
 		}
 	}
 
@@ -182,64 +265,15 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		displayEl.innerHTML = ""
 		displayAr = []
 		displayStr = ''
-		displayIsClear = true
 	}
 
 
-	equal.addEventListener("click", () => {
-
-		// displayIsClear = false
-
-		updateOperands()
-
-		console.log("a: ", a);
-		console.log("b: ", b);
-		console.log("operator: ", operator);
-		console.log("answer: ", answer);
-		console.log("displayAr: ", displayAr);
-		console.log("displayStr: ", displayStr);
-		console.log("displayIsClear: ", displayIsClear);
 
 
-		answer = operate(operator, a, b)
-		console.log(answer);
 
-		if (answer) {
-			// update display and display array
-			displayEl.innerHTML = answer
-
-			displayAr = answer.toString().split("")
-			console.log(displayAr);
-		}
-
-
-		// clear a, b , answer stays as a
-		a = answer
-		b = undefined
-		answer = undefined
-		// displayIsClear = false
-
-		// clear display
-		// displayEl.innerHTML = ""
-		// display = []
-
-		// clearDisplay()
-
-		// add = in preview display
-		// updatePreview()
-	})
-
-
-	clear.addEventListener("click", () => {
-		a = undefined
-		b = undefined
-		displayAr = []
-		displayStr = ''
-		displayEl.innerHTML = ""
-		displayIsClear = false
-		// displayPreviewEl.innerHTML = ""
-	})
 
 })
 
-// how to clear display after first digit
+
+
+// clear display by first gigit input after operator
