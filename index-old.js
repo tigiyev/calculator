@@ -6,33 +6,18 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let b
 	let operator
 	let answer
-	let buffer = ""
 
+	let displayAr = ['0']
+	let displayStr = '0'
 	let displayEl = document.querySelector(".calc__display__content")
 	let displayPreviewEl = document.querySelector(".calc__display__preview")
-
-	let digits = document.querySelectorAll("[calc-digit]")
-	let operators = document.querySelectorAll("[calc-operator]")
-	let equal = document.querySelector("[calc-role='equal']")
-	let clear = document.querySelector("[calc-role='clear']")
-
-	let firstInputAfterOperator = false
-
-
-	console.log("a: ", a);
-	console.log("b: ", b);
-	console.log("operator: ", operator);
-	console.log("answer: ", answer);
-	console.log("buffer: ", buffer);
-	console.log("displayEl: ", displayEl);
-	console.log("firstInputAfterOperator: ", firstInputAfterOperator);
-	console.log("--------------------------");
 
 
 	function add(a, b) {
 		return a + b
 	}
 	function subtract(a, b) {
+		// debugger
 		return a - b
 	}
 	function multiply(a, b) {
@@ -74,7 +59,16 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	}
 
 
-	digits.forEach(e => {
+	let numbers = document.querySelectorAll("[calc-digit]")
+	let operators = document.querySelectorAll("[calc-operator]")
+	let equal = document.querySelector("[calc-role='equal']")
+	let clear = document.querySelector("[calc-role='clear']")
+
+
+
+	let firstInputAfterOperator = false
+
+	numbers.forEach(e => {
 		e.addEventListener('click', () => {
 
 			if (firstInputAfterOperator) {
@@ -89,10 +83,12 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			console.log("b: ", b);
 			console.log("operator: ", operator);
 			console.log("answer: ", answer);
-			console.log("buffer: ", buffer);
-			console.log("displayEl: ", displayEl);
+			console.log("displayAr: ", displayAr);
+			console.log("displayStr: ", displayStr);
 			console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 			console.log("--------------------------");
+
+
 		})
 	})
 
@@ -103,19 +99,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 			updateOperands()
 
-			if (a && b && operator) {
-
-				answer = operate(operator, a, b)
-				a = answer
-				b = undefined
-				answer = undefined
-
-				displayEl.innerHTML = a
-			}
-
-			// update current operator
-			// this block comes later than if statement for preventing bug when
-			// changing operators makes wrong last calculations 
+			// update operator
 			switch (e.getAttribute("calc-operator")) {
 				case "division": operator = "division"
 					break
@@ -127,12 +111,23 @@ document.addEventListener("DOMContentLoaded", (e) => {
 					break
 			}
 
+			if (a && b && operator) {
+				// debugger
+				answer = operate(operator, a, b)
+				a = answer
+				b = undefined
+				answer = undefined
+
+				displayEl.innerHTML = a
+				displayAr = a.toString().split("")
+			}
+
 			console.log("a: ", a);
 			console.log("b: ", b);
 			console.log("operator: ", operator);
 			console.log("answer: ", answer);
-			console.log("buffer: ", buffer);
-			console.log("displayEl: ", displayEl);
+			console.log("displayAr: ", displayAr);
+			console.log("displayStr: ", displayStr);
 			console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 			console.log("--------------------------");
 
@@ -147,39 +142,34 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 		updateOperands()
 
-		if (a && b && operator) {
-			console.log("option1");
+		answer = operate(operator, a, b)
+		// debugger
 
-			// if (b === "" || b === undefined) {
-			answer = operate(operator, b, b)
-			// } else {
-			// 	answer = operate(operator, a, b)
-			// }
-
-			a = answer
-			b = undefined
-			answer = undefined
-			displayEl.innerHTML = a
-
-		}
-		// else if (b === "" || b === undefined) {
-		// 	console.log("option2");
-
-		// 	answer = operate(operator, a, a)
-		// 	a = answer
-		// 	b = undefined
-		// 	answer = undefined
-		// 	displayEl.innerHTML = a
+		// if (answer) {
+		// update display and display array
+		displayEl.innerHTML = answer
+		displayAr = answer.toString().split("")
 		// }
-
 
 		console.log("a: ", a);
 		console.log("b: ", b);
 		console.log("operator: ", operator);
 		console.log("answer: ", answer);
-		console.log("buffer: ", buffer);
-		console.log("displayEl: ", displayEl);
-		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
+		console.log("displayAr: ", displayAr);
+		console.log("displayStr: ", displayStr);
+		console.log("--------------------------");
+
+
+		// clear a, b , answer stays as a
+		a = answer
+		b = undefined
+		// operator = undefined
+		answer = undefined
+
+		console.log("a: ", a);
+		console.log("b: ", b);
+		console.log("operator: ", operator);
+		console.log("answer: ", answer);
 		console.log("--------------------------");
 
 		// updatePreview()
@@ -190,16 +180,17 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		b = undefined
 		operator = undefined
 		answer = undefined
-		buffer = '0'
-		displayEl.innerHTML = "0"
+		displayAr = ['0']
+		displayStr = '0'
+		displayEl.innerHTML = ""
 		firstInputAfterOperator = false
 
 		console.log("a: ", a);
 		console.log("b: ", b);
 		console.log("operator: ", operator);
 		console.log("answer: ", answer);
-		console.log("buffer: ", buffer);
-		console.log("displayEl: ", displayEl);
+		console.log("displayAr: ", displayAr);
+		console.log("displayStr: ", displayStr);
 		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 		console.log("--------------------------");
 	})
@@ -208,18 +199,28 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 		// console.log("number: ", number);
 
-		// prevents displayEl showing 00000
+		// prevents display showing 00000
+		// delete default 0 if next number is else than 0 
+		// if answer is 0 show it in display
+		if (displayAr[0] == "0" && displayAr.length == 1 && number == "0") {
+			return
+		} else if (displayAr[0] == "0" && displayAr.length == 1) {
+			displayAr = []
 
-		if (buffer == "0" && buffer.length == 1) {
-			buffer = ""
-			buffer = buffer + number
-			displayEl.innerHTML = buffer
-
+			displayAr.push(number)
+			displayStr = displayAr.join("")
+			displayEl.innerHTML = displayStr
 		} else {
-			buffer = buffer + number
-			displayEl.innerHTML = buffer
+			displayAr.push(number)
+			displayStr = displayAr.join("")
+			displayEl.innerHTML = displayStr
 		}
 
+
+		// place a, b and operator in preview
+
+
+		// add tousand separator later
 	}
 
 	// function updatePreview() {
@@ -253,18 +254,26 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	function updateOperands() {
 		if (a === "" || a === undefined) {
-			a = buffer
-			buffer = ""
+			a = displayStr
 		}
 		else {
-			b = buffer
-			buffer = ""
+			b = displayStr
 		}
 	}
 
 	function clearDisplay() {
 		displayEl.innerHTML = ""
+		displayAr = []
+		displayStr = ''
 	}
 
 
+
+
+
+
 })
+
+
+
+// clear display by first gigit input after operator
