@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let operator
 	let answer
 	let buffer = ""
+	let prevB
 
 	let displayEl = document.querySelector(".calc__display__content")
 	let displayPreviewEl = document.querySelector(".calc__display__preview")
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	console.log("operator: ", operator);
 	console.log("answer: ", answer);
 	console.log("buffer: ", buffer);
+	console.log("prevB: ", prevB);
 	console.log("displayEl: ", displayEl);
 	console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 	console.log("--------------------------");
@@ -52,19 +54,19 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 		switch (operator) {
 			case "add":
-				return add(aNumb, bNumb)
+				return String(add(aNumb, bNumb))
 				break;
 
 			case "subtract":
-				return subtract(aNumb, bNumb)
+				return String(subtract(aNumb, bNumb))
 				break;
 
 			case "multiply":
-				return multiply(aNumb, bNumb)
+				return String(multiply(aNumb, bNumb))
 				break;
 
 			case "division":
-				return division(aNumb, bNumb)
+				return String(division(aNumb, bNumb))
 				break;
 
 			default:
@@ -83,7 +85,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			}
 
 			updateDisplay(e.getAttribute("calc-digit"))
-			// updateOperands()
 
 			console.log("a: ", a);
 			console.log("b: ", b);
@@ -96,12 +97,18 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		})
 	})
 
+
 	operators.forEach(e => {
 		e.addEventListener('click', () => {
 
 			firstInputAfterOperator = true
 
 			updateOperands()
+
+			// fix bug with wrong display when a is empty in the start 
+			if (a === undefined || a === "") {
+				a = "0"
+			}
 
 			if (a && b && operator) {
 
@@ -136,7 +143,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 			console.log("--------------------------");
 
-			// updatePreview()
+			updatePreview()
 
 		})
 	})
@@ -147,30 +154,38 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 		updateOperands()
 
-		if (a && b && operator) {
-			console.log("option1");
+		// repeat last action on pressing equal
+		if (b === "" || b === undefined) {
 
-			// if (b === "" || b === undefined) {
-			answer = operate(operator, b, b)
-			// } else {
-			// 	answer = operate(operator, a, b)
-			// }
+			// use previous b
 
-			a = answer
-			b = undefined
-			answer = undefined
-			displayEl.innerHTML = a
+			if (a && prevB && operator) {
 
+				answer = operate(operator, a, prevB)
+				a = answer
+				displayEl.innerHTML = answer
+				answer = undefined
+			}
+
+		} else {
+
+			// use default
+			if (a && b && operator) {
+
+
+
+				answer = operate(operator, a, b)
+				a = answer
+				displayEl.innerHTML = answer
+				updatePreview()
+				// displayPreviewEl.innerHTML = displayPreviewEl.innerHTML + " " + b + " ="
+
+				answer = undefined
+
+				prevB = b
+				b = undefined
+			}
 		}
-		// else if (b === "" || b === undefined) {
-		// 	console.log("option2");
-
-		// 	answer = operate(operator, a, a)
-		// 	a = answer
-		// 	b = undefined
-		// 	answer = undefined
-		// 	displayEl.innerHTML = a
-		// }
 
 
 		console.log("a: ", a);
@@ -178,11 +193,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		console.log("operator: ", operator);
 		console.log("answer: ", answer);
 		console.log("buffer: ", buffer);
+		console.log("prevB: ", prevB);
 		console.log("displayEl: ", displayEl);
 		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 		console.log("--------------------------");
 
 		// updatePreview()
+		// displayPreviewEl.innerHTML = displayPreviewEl.innerHTML + " " + prevB + " ="
+
 	})
 
 	clear.addEventListener("click", () => {
@@ -190,68 +208,47 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		b = undefined
 		operator = undefined
 		answer = undefined
-		buffer = '0'
+		buffer = ""
+		prevB = undefined
 		displayEl.innerHTML = "0"
 		firstInputAfterOperator = false
+		displayPreviewEl.innerHTML = ""
 
 		console.log("a: ", a);
 		console.log("b: ", b);
 		console.log("operator: ", operator);
 		console.log("answer: ", answer);
 		console.log("buffer: ", buffer);
+		console.log("prevB: ", prevB);
 		console.log("displayEl: ", displayEl);
 		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 		console.log("--------------------------");
 	})
 
-	function updateDisplay(number) {
+	function updateDisplay(digit) {
 
-		// console.log("number: ", number);
+		// v1
+		// buffer = buffer + digit
+		// displayEl.innerHTML = buffer
 
+
+		// v2
 		// prevents displayEl showing 00000
 
 		if (buffer == "0" && buffer.length == 1) {
 			buffer = ""
-			buffer = buffer + number
+			buffer = buffer + digit
 			displayEl.innerHTML = buffer
 
 		} else {
-			buffer = buffer + number
+			buffer = buffer + digit
 			displayEl.innerHTML = buffer
 		}
 
 	}
 
-	// function updatePreview() {
-
-	// 	// place a, b and operator in preview
-	// 	let ar = []
-	// 	if (a) {
-	// 		ar.push(a.toString())
-	// 	}
-	// 	if (operator) {
-	// 		switch (operator) {
-	// 			case "add": ar.push("+")
-	// 				break;
-	// 			case "subtract": ar.push("-")
-	// 				break;
-	// 			case "multiply": ar.push("×")
-	// 				break;
-	// 			case "division": ar.push("÷")
-	// 				break;
-	// 		}
-	// 	}
-	// 	if (b) {
-	// 		ar.push(b.toString())
-	// 	}
-	// 	displayPreviewEl.innerHTML = ar.join(" ")
-
-	// }
-
-
-
-
 	function updateOperands() {
+		// debugger
 		if (a === "" || a === undefined) {
 			a = buffer
 			buffer = ""
@@ -265,6 +262,39 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	function clearDisplay() {
 		displayEl.innerHTML = ""
 	}
+
+
+	// v2
+	function updatePreview() {
+		let str = ""
+
+		if (a) {
+			str = str + a.toString()
+		}
+		if (operator) {
+			switch (operator) {
+				case "add": str += " +"
+					break;
+				case "subtract": str += " -"
+					break;
+				case "multiply": str += " ×"
+					break;
+				case "division": str += " ÷"
+					break;
+			}
+		}
+		// if (b) {
+		// 	str = str + b.toString()
+		// }
+		// if (buffer) {
+		// 	str = str + buffer.toString()
+		// }
+
+		displayPreviewEl.innerHTML = str
+	}
+
+
+
 
 
 })
