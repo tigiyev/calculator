@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let answer
 	let buffer = ""
 	let prevB
+	let prevAnswer
+	let operatorSymbol
 
 	let displayEl = document.querySelector(".calc__display__content")
 	let displayPreviewEl = document.querySelector(".calc__display__preview")
@@ -23,9 +25,11 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	console.log("a: ", a);
 	console.log("b: ", b);
 	console.log("operator: ", operator);
+	console.log("operatorSymbol: ", operatorSymbol);
 	console.log("answer: ", answer);
 	console.log("buffer: ", buffer);
 	console.log("prevB: ", prevB);
+	console.log("prevAnswer: ", prevAnswer);
 	console.log("displayEl: ", displayEl);
 	console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 	console.log("--------------------------");
@@ -72,7 +76,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			default:
 				break;
 		}
-
 	}
 
 
@@ -89,8 +92,11 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			console.log("a: ", a);
 			console.log("b: ", b);
 			console.log("operator: ", operator);
+			console.log("operatorSymbol: ", operatorSymbol);
 			console.log("answer: ", answer);
 			console.log("buffer: ", buffer);
+			console.log("prevB: ", prevB);
+			console.log("prevAnswer: ", prevAnswer);
 			console.log("displayEl: ", displayEl);
 			console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 			console.log("--------------------------");
@@ -105,6 +111,11 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 			updateOperands()
 
+			// setting first time previous answer for display preview
+			if (prevAnswer === undefined) {
+				prevAnswer = a
+			}
+
 			// fix bug with wrong display when a is empty in the start 
 			if (a === undefined || a === "") {
 				a = "0"
@@ -114,36 +125,54 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 				answer = operate(operator, a, b)
 				a = answer
+				displayEl.innerHTML = answer
+
+				// update preview
+				// displayPreviewEl.innerHTML = prevAnswer + " " + operator + " " + b + " ="
+				// displayPreviewEl.innerHTML = prevAnswer + " " + operator
+				// prevAnswer = answer
+
+
 				b = undefined
 				answer = undefined
 
-				displayEl.innerHTML = a
+
 			}
 
 			// update current operator
 			// this block comes later than if statement for preventing bug when
 			// changing operators makes wrong last calculations 
 			switch (e.getAttribute("calc-operator")) {
-				case "division": operator = "division"
+				case "division": operator = "division", operatorSymbol = "÷"
 					break
-				case "multiply": operator = "multiply"
+				case "multiply": operator = "multiply", operatorSymbol = "×"
 					break
-				case "subtract": operator = "subtract"
+				case "subtract": operator = "subtract", operatorSymbol = "-"
 					break
-				case "add": operator = "add"
+				case "add": operator = "add", operatorSymbol = "+"
 					break
 			}
+
+			// update preview (after operator)
+			// displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol
+			displayPreviewEl.innerHTML = a + " " + operatorSymbol
+
+			// answer = undefined
+
+
+
 
 			console.log("a: ", a);
 			console.log("b: ", b);
 			console.log("operator: ", operator);
+			console.log("operatorSymbol: ", operatorSymbol);
 			console.log("answer: ", answer);
 			console.log("buffer: ", buffer);
+			console.log("prevB: ", prevB);
+			console.log("prevAnswer: ", prevAnswer);
 			console.log("displayEl: ", displayEl);
 			console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 			console.log("--------------------------");
-
-			updatePreview()
 
 		})
 	})
@@ -154,6 +183,16 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 		updateOperands()
 
+		// setting first time previous answer for display preview
+		if (prevAnswer === undefined) {
+			prevAnswer = a
+		}
+
+		// setting default previousB
+		if (prevB === undefined) {
+			prevB = a
+		}
+
 		// repeat last action on pressing equal
 		if (b === "" || b === undefined) {
 
@@ -161,9 +200,19 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 			if (a && prevB && operator) {
 
+				// // 
+				// prevB = prevAnswer
+				// // 
+
 				answer = operate(operator, a, prevB)
 				a = answer
 				displayEl.innerHTML = answer
+
+				// update preview (after equal)
+				displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol + " " + prevB + " ="
+				// displayPreviewEl.innerHTML = a + " " + operatorSymbol + " " + prevB + " ="
+				prevAnswer = answer
+
 				answer = undefined
 			}
 
@@ -172,13 +221,18 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			// use default
 			if (a && b && operator) {
 
+				// displayPreviewEl.innerHTML = displayPreviewEl.innerHTML + " " + b + " ="
 
 
 				answer = operate(operator, a, b)
 				a = answer
 				displayEl.innerHTML = answer
-				updatePreview()
-				// displayPreviewEl.innerHTML = displayPreviewEl.innerHTML + " " + b + " ="
+
+				// update preview (after equal)
+				displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol + " " + b + " ="
+				// displayPreviewEl.innerHTML = a + " " + operatorSymbol + " " + b + " ="
+				prevAnswer = answer
+
 
 				answer = undefined
 
@@ -191,9 +245,11 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		console.log("a: ", a);
 		console.log("b: ", b);
 		console.log("operator: ", operator);
+		console.log("operatorSymbol: ", operatorSymbol);
 		console.log("answer: ", answer);
 		console.log("buffer: ", buffer);
 		console.log("prevB: ", prevB);
+		console.log("prevAnswer: ", prevAnswer);
 		console.log("displayEl: ", displayEl);
 		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 		console.log("--------------------------");
@@ -210,6 +266,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		answer = undefined
 		buffer = ""
 		prevB = undefined
+		prevAnswer = undefined
 		displayEl.innerHTML = "0"
 		firstInputAfterOperator = false
 		displayPreviewEl.innerHTML = ""
@@ -217,20 +274,17 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		console.log("a: ", a);
 		console.log("b: ", b);
 		console.log("operator: ", operator);
+		console.log("operatorSymbol: ", operatorSymbol);
 		console.log("answer: ", answer);
 		console.log("buffer: ", buffer);
 		console.log("prevB: ", prevB);
+		console.log("prevAnswer: ", prevAnswer);
 		console.log("displayEl: ", displayEl);
 		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 		console.log("--------------------------");
 	})
 
 	function updateDisplay(digit) {
-
-		// v1
-		// buffer = buffer + digit
-		// displayEl.innerHTML = buffer
-
 
 		// v2
 		// prevents displayEl showing 00000
@@ -262,39 +316,5 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	function clearDisplay() {
 		displayEl.innerHTML = ""
 	}
-
-
-	// v2
-	function updatePreview() {
-		let str = ""
-
-		if (a) {
-			str = str + a.toString()
-		}
-		if (operator) {
-			switch (operator) {
-				case "add": str += " +"
-					break;
-				case "subtract": str += " -"
-					break;
-				case "multiply": str += " ×"
-					break;
-				case "division": str += " ÷"
-					break;
-			}
-		}
-		// if (b) {
-		// 	str = str + b.toString()
-		// }
-		// if (buffer) {
-		// 	str = str + buffer.toString()
-		// }
-
-		displayPreviewEl.innerHTML = str
-	}
-
-
-
-
 
 })
