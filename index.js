@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let prevB
 	let prevAnswer
 	let operatorSymbol
+	let numberIsNegative = false
 
 	let displayEl = document.querySelector(".calc__display__content")
 	let displayPreviewEl = document.querySelector(".calc__display__preview")
@@ -18,21 +19,12 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let operators = document.querySelectorAll("[calc-operator]")
 	let equal = document.querySelector("[calc-role='equal']")
 	let clear = document.querySelector("[calc-role='clear']")
+	let negative = document.querySelector("[calc-role='negative']")
 
 	let firstInputAfterOperator = false
 
 
-	console.log("a: ", a);
-	console.log("b: ", b);
-	console.log("operator: ", operator);
-	console.log("operatorSymbol: ", operatorSymbol);
-	console.log("answer: ", answer);
-	console.log("buffer: ", buffer);
-	console.log("prevB: ", prevB);
-	console.log("prevAnswer: ", prevAnswer);
-	console.log("displayEl: ", displayEl);
-	console.log("firstInputAfterOperator: ", firstInputAfterOperator);
-	console.log("--------------------------");
+	testLog()
 
 
 	function add(a, b) {
@@ -89,20 +81,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 			updateDisplay(e.getAttribute("calc-digit"))
 
-			console.log("a: ", a);
-			console.log("b: ", b);
-			console.log("operator: ", operator);
-			console.log("operatorSymbol: ", operatorSymbol);
-			console.log("answer: ", answer);
-			console.log("buffer: ", buffer);
-			console.log("prevB: ", prevB);
-			console.log("prevAnswer: ", prevAnswer);
-			console.log("displayEl: ", displayEl);
-			console.log("firstInputAfterOperator: ", firstInputAfterOperator);
-			console.log("--------------------------");
+			testLog()
 		})
 	})
-
 
 	operators.forEach(e => {
 		e.addEventListener('click', () => {
@@ -150,17 +131,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			displayPreviewEl.innerHTML = a + " " + operatorSymbol
 
 
-			console.log("a: ", a);
-			console.log("b: ", b);
-			console.log("operator: ", operator);
-			console.log("operatorSymbol: ", operatorSymbol);
-			console.log("answer: ", answer);
-			console.log("buffer: ", buffer);
-			console.log("prevB: ", prevB);
-			console.log("prevAnswer: ", prevAnswer);
-			console.log("displayEl: ", displayEl);
-			console.log("firstInputAfterOperator: ", firstInputAfterOperator);
-			console.log("--------------------------");
+			testLog()
 		})
 	})
 
@@ -218,17 +189,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		}
 
 
-		console.log("a: ", a);
-		console.log("b: ", b);
-		console.log("operator: ", operator);
-		console.log("operatorSymbol: ", operatorSymbol);
-		console.log("answer: ", answer);
-		console.log("buffer: ", buffer);
-		console.log("prevB: ", prevB);
-		console.log("prevAnswer: ", prevAnswer);
-		console.log("displayEl: ", displayEl);
-		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
-		console.log("--------------------------");
+		testLog()
 	})
 
 	clear.addEventListener("click", () => {
@@ -243,18 +204,31 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		firstInputAfterOperator = false
 		displayPreviewEl.innerHTML = ""
 
-		console.log("a: ", a);
-		console.log("b: ", b);
-		console.log("operator: ", operator);
-		console.log("operatorSymbol: ", operatorSymbol);
-		console.log("answer: ", answer);
-		console.log("buffer: ", buffer);
-		console.log("prevB: ", prevB);
-		console.log("prevAnswer: ", prevAnswer);
-		console.log("displayEl: ", displayEl);
-		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
-		console.log("--------------------------");
+		testLog()
 	})
+
+	negative.addEventListener("click", () => {
+
+
+
+		// works with bugs
+
+		if (buffer !== "" && buffer !== undefined) {
+			numberIsNegative = !numberIsNegative
+			displayEl.innerHTML = String(-displayEl.innerHTML)
+			buffer = String(-buffer)
+		}
+
+
+		// maybe rewrite logic of buffer
+		// if b is absent meke buffer == a
+
+
+
+		testLog()
+	})
+
+
 
 	function updateDisplay(digit) {
 
@@ -284,6 +258,21 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	function clearDisplay() {
 		displayEl.innerHTML = ""
+	}
+
+	function testLog() {
+		console.log("a: ", a);
+		console.log("b: ", b);
+		// console.log("operator: ", operator);
+		console.log("operatorSymbol: ", operatorSymbol);
+		console.log("answer: ", answer);
+		console.log("buffer: ", buffer);
+		console.log("prevB: ", prevB);
+		console.log("prevAnswer: ", prevAnswer);
+		// console.log("displayEl: ", displayEl);
+		// console.log("firstInputAfterOperator: ", firstInputAfterOperator);
+		console.log("numberIsNegative: ", numberIsNegative);
+		console.log("--------------------------");
 	}
 
 })
