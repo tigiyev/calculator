@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	function operate(operator, a, b) {
 		// debugger
 
-		// make a and b numbers
+		// convert a and b to numbers
 		let aNumb = Number(a)
 		let bNumb = Number(b)
 
@@ -127,21 +127,11 @@ document.addEventListener("DOMContentLoaded", (e) => {
 				a = answer
 				displayEl.innerHTML = answer
 
-				// update preview
-				// displayPreviewEl.innerHTML = prevAnswer + " " + operator + " " + b + " ="
-				// displayPreviewEl.innerHTML = prevAnswer + " " + operator
-				// prevAnswer = answer
-
-
 				b = undefined
 				answer = undefined
-
-
 			}
 
-			// update current operator
-			// this block comes later than if statement for preventing bug when
-			// changing operators makes wrong last calculations 
+
 			switch (e.getAttribute("calc-operator")) {
 				case "division": operator = "division", operatorSymbol = "÷"
 					break
@@ -153,13 +143,11 @@ document.addEventListener("DOMContentLoaded", (e) => {
 					break
 			}
 
+			// clear prevB to solve bug when doing 1+2= + = (5 instead of 6)
+			prevB = undefined
+
 			// update preview (after operator)
-			// displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol
 			displayPreviewEl.innerHTML = a + " " + operatorSymbol
-
-			// answer = undefined
-
-
 
 
 			console.log("a: ", a);
@@ -173,7 +161,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			console.log("displayEl: ", displayEl);
 			console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 			console.log("--------------------------");
-
 		})
 	})
 
@@ -193,16 +180,11 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			prevB = a
 		}
 
-		// repeat last action on pressing equal
+		// repeat last action if b is absent on pressing equal
 		if (b === "" || b === undefined) {
 
 			// use previous b
-
 			if (a && prevB && operator) {
-
-				// // 
-				// prevB = prevAnswer
-				// // 
 
 				answer = operate(operator, a, prevB)
 				a = answer
@@ -210,19 +192,15 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 				// update preview (after equal)
 				displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol + " " + prevB + " ="
-				// displayPreviewEl.innerHTML = a + " " + operatorSymbol + " " + prevB + " ="
-				prevAnswer = answer
 
+				prevAnswer = answer
 				answer = undefined
 			}
 
 		} else {
 
-			// use default
+			// default
 			if (a && b && operator) {
-
-				// displayPreviewEl.innerHTML = displayPreviewEl.innerHTML + " " + b + " ="
-
 
 				answer = operate(operator, a, b)
 				a = answer
@@ -230,10 +208,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 				// update preview (after equal)
 				displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol + " " + b + " ="
-				// displayPreviewEl.innerHTML = a + " " + operatorSymbol + " " + b + " ="
+
 				prevAnswer = answer
-
-
 				answer = undefined
 
 				prevB = b
@@ -253,10 +229,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		console.log("displayEl: ", displayEl);
 		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 		console.log("--------------------------");
-
-		// updatePreview()
-		// displayPreviewEl.innerHTML = displayPreviewEl.innerHTML + " " + prevB + " ="
-
 	})
 
 	clear.addEventListener("click", () => {
@@ -286,9 +258,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	function updateDisplay(digit) {
 
-		// v2
 		// prevents displayEl showing 00000
-
 		if (buffer == "0" && buffer.length == 1) {
 			buffer = ""
 			buffer = buffer + digit
@@ -302,7 +272,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	}
 
 	function updateOperands() {
-		// debugger
 		if (a === "" || a === undefined) {
 			a = buffer
 			buffer = ""
