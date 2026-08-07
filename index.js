@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let prevB
 	let prevAnswer
 	let operatorSymbol
-	let numberIsNegative = false
+	// let numberIsNegative = false
 
 	let displayEl = document.querySelector(".calc__display__content")
 	let displayPreviewEl = document.querySelector(".calc__display__preview")
@@ -74,8 +74,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	digits.forEach(e => {
 		e.addEventListener('click', () => {
 
+			// clear display after firts selected operator
 			if (firstInputAfterOperator) {
-				clearDisplay()
+				displayEl.innerHTML = ""
 				firstInputAfterOperator = false
 			}
 
@@ -93,9 +94,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			updateOperands()
 
 			// setting first time previous answer for display preview
-			if (prevAnswer === undefined) {
-				prevAnswer = a
-			}
+			// if (prevAnswer === undefined) {
+			// 	prevAnswer = a
+			// }
 
 			// fix bug with wrong display when a is empty in the start 
 			if (a === undefined || a === "") {
@@ -109,7 +110,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 				displayEl.innerHTML = answer
 
 				b = undefined
-				answer = undefined
+				// answer = undefined
 			}
 
 
@@ -163,9 +164,10 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 				// update preview (after equal)
 				displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol + " " + prevB + " ="
+				// displayPreviewEl.innerHTML = answer + " " + operatorSymbol + " " + prevB + " ="
 
 				prevAnswer = answer
-				answer = undefined
+				// answer = undefined
 			}
 
 		} else {
@@ -179,9 +181,10 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 				// update preview (after equal)
 				displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol + " " + b + " ="
+				// displayPreviewEl.innerHTML = answer + " " + operatorSymbol + " " + b + " ="
 
 				prevAnswer = answer
-				answer = undefined
+				// answer = undefined
 
 				prevB = b
 				b = undefined
@@ -197,12 +200,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		b = undefined
 		operator = undefined
 		answer = undefined
+		operatorSymbol = undefined
 		buffer = ""
 		prevB = undefined
 		prevAnswer = undefined
 		displayEl.innerHTML = "0"
 		firstInputAfterOperator = false
 		displayPreviewEl.innerHTML = ""
+		// numberIsNegative = false
 
 		testLog()
 	})
@@ -210,20 +215,19 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	negative.addEventListener("click", () => {
 
 
+		// numberIsNegative = !numberIsNegative
+		displayEl.innerHTML = String(-displayEl.innerHTML)
 
-		// works with bugs
-
-		if (buffer !== "" && buffer !== undefined) {
-			numberIsNegative = !numberIsNegative
-			displayEl.innerHTML = String(-displayEl.innerHTML)
+		if (buffer !== "") {
 			buffer = String(-buffer)
 		}
 
+		if (a !== undefined) {
 
-		// maybe rewrite logic of buffer
-		// if b is absent meke buffer == a
-
-
+			if (buffer == "") {
+				a = String(-a)
+			}
+		}
 
 		testLog()
 	})
@@ -256,22 +260,19 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		}
 	}
 
-	function clearDisplay() {
-		displayEl.innerHTML = ""
-	}
 
 	function testLog() {
+		console.log("buffer: ", buffer);
 		console.log("a: ", a);
 		console.log("b: ", b);
-		// console.log("operator: ", operator);
 		console.log("operatorSymbol: ", operatorSymbol);
+		// console.log("operator: ", operator);
 		console.log("answer: ", answer);
-		console.log("buffer: ", buffer);
-		console.log("prevB: ", prevB);
 		console.log("prevAnswer: ", prevAnswer);
+		console.log("prevB: ", prevB);
 		// console.log("displayEl: ", displayEl);
 		// console.log("firstInputAfterOperator: ", firstInputAfterOperator);
-		console.log("numberIsNegative: ", numberIsNegative);
+		// console.log("numberIsNegative: ", numberIsNegative);
 		console.log("--------------------------");
 	}
 
