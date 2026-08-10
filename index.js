@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let b
 	let operator
 	let answer
-	let buffer = ""
+	let buffer = "0"
+	// recently changed
+	let prevA
 	let prevB
 	let prevAnswer
 	let operatorSymbol
@@ -22,7 +24,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let decimal = document.querySelector("[calc-role='decimal']")
 
 	let firstInputAfterOperator = false
-	let bufferHasDecimal = false
+	let bufferHasDecimal = undefined
 
 	let decimalSymbol = "."
 	// if this going to change, have to make internal decimal convertor
@@ -48,44 +50,59 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	function operate(operator, a, b) {
 		// debugger
+		// b = "12"
+		// b = NaN
+		// operator = "asdasd"
 
-		// convert a and b to numbers
-		let aNumb = Number(a)
-		let bNumb = Number(b)
+		if (typeof a === "number" && typeof b === "number") {
 
-		switch (operator) {
-			case "add":
-				return String(add(aNumb, bNumb))
-				break;
+			switch (operator) {
+				case "add":
+					return add(a, b)
+					break;
 
-			case "subtract":
-				return String(subtract(aNumb, bNumb))
-				break;
+				case "subtract":
+					return subtract(a, b)
+					break;
 
-			case "multiply":
-				return String(multiply(aNumb, bNumb))
-				break;
+				case "multiply":
+					return multiply(a, b)
+					break;
 
-			case "division":
-				return String(division(aNumb, bNumb))
-				break;
+				case "division":
+					return division(a, b)
+					break;
 
-			default:
-				break;
-		}
+				default:
+					throw new Error("operator not selected")
+					break;
+			}
+		} else throw new Error("a or b is not a number");
 	}
 
 
 	digits.forEach(e => {
 		e.addEventListener('click', () => {
 
+			let digit = e.getAttribute("calc-digit")
+
 			// clear display after firts selected operator
 			if (firstInputAfterOperator) {
 				displayEl.innerHTML = ""
+				buffer = ""
 				firstInputAfterOperator = false
 			}
 
-			updateDisplay(e.getAttribute("calc-digit"))
+			// prevents displayEl showing 00000
+			if (buffer == "0" && buffer.length == 1) {
+				buffer = ""
+				buffer = buffer + digit
+				displayEl.innerHTML = buffer
+
+			} else {
+				buffer = buffer + digit
+				displayEl.innerHTML = buffer
+			}
 
 			testLog()
 		})
@@ -94,47 +111,41 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	operators.forEach(e => {
 		e.addEventListener('click', () => {
+			debugger
 
 			firstInputAfterOperator = true
 
-			// trim extra zeroes
-			// clear buffer 0.000 => 0
-			// remove extra zeros 0.2000 => 0.2
-			buffer = Number(buffer)
-			buffer = String(buffer)
-
-
 			updateOperands()
 
-			// to fix bug where first time entered a is not trimed from zeros 
-			displayEl.innerHTML = a
-
-			// setting first time previous answer for display preview
-			// if (prevAnswer === undefined) {
-			// 	prevAnswer = a
+			// if (a === undefined) {
+			// 	a = Number(buffer)
+			// } else if (b === undefined) {
+			// 	b = Number(buffer)
 			// }
 
-			// fix bug with wrong display when a is empty in the start 
-			if (a === undefined || a === "") {
-				a = "0"
-			}
 
-			// it works 	ex. 2+2+2
+
+
+			// to fix bug where first time entered a is not trimed from zeros 
+			// displayEl.innerHTML = a
+
+
+			// fix bug with wrong display when a is empty in the start 
+			// if (a === undefined || a === "") {
+			// 	a = "0"
+			// }
+
+
+			// for calculating without = 		ex. 2+2+2
+			// comes before operator switch to calculate correctly 12+*2+ 
+			// ???
+			// !!! do not fill b until digits are inputed 
 			if (a && b && operator) {
 
 				// debugger
+				prevA = a
+
 				answer = operate(operator, a, b)
-
-				// ????
-				// this does not work yet because b can not be with decimal yet
-				// turn 0. to 0 after pressing operator
-				// if (answer[answer.length - 1] === decimalSymbol) {
-				// 	alert("ho")
-				// 	answer = answer.slice([answer.length])
-				// 	bufferHasDecimal = false
-				// }
-				// ????
-
 				a = answer
 				displayEl.innerHTML = answer
 
@@ -153,19 +164,19 @@ document.addEventListener("DOMContentLoaded", (e) => {
 					break
 			}
 
+
 			// clear prevB to solve bug when doing 1+2= + = (5 instead of 6)
-			prevB = undefined
+			// prevB = undefined
 
 			// update preview (after operator)
 			displayPreviewEl.innerHTML = a + " " + operatorSymbol
 
 
-			if (buffer.includes(".")) {
-				bufferHasDecimal = true
-			} else bufferHasDecimal = false
-
-
-
+			// if (buffer.includes(".")) {
+			// 	bufferHasDecimal = true
+			// } else if (!(buffer.includes("."))) {
+			// 	bufferHasDecimal = false
+			// } else bufferHasDecimal = undefined
 
 
 			testLog()
@@ -174,94 +185,98 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 
 	equal.addEventListener("click", () => {
+		// debugger
 
 		firstInputAfterOperator = true
-
-		buffer = Number(buffer)
-		buffer = String(buffer)
 
 		updateOperands()
 
 		// setting first time previous answer for display preview
-		if (prevAnswer === undefined) {
-			prevAnswer = a
-		}
+		// if (prevAnswer === undefined) {
+		// 	prevAnswer = a
+		// }
 
 		// setting default previousB
-		if (prevB === undefined) {
-			prevB = a
-		}
+		// if (prevB === undefined) {
+		// 	prevB = a
+		// }
 
 		// repeat last action if b is absent on pressing equal
-		if (b === "" || b === undefined) {
+		// if (b === undefined) {
 
-			// when pressing = in the start
-			if (b === undefined) {
-				displayPreviewEl.innerHTML = "0 ="
-			}
+		// 	// when pressing = in the start
+		// 	if (b === undefined) {
+		// 		displayPreviewEl.innerHTML = "0 ="
+		// 	}
 
 
-			// use previous b
-			if (a && prevB && operator) {
+		// 	// use previous b
+		// 	if (a && prevB && operator) {
 
-				answer = operate(operator, a, prevB)
-				a = answer
-				displayEl.innerHTML = answer
+		// 		answer = operate(operator, a, prevB)
+		// 		a = answer
+		// 		displayEl.innerHTML = answer
 
-				// update preview (after equal)
-				displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol + " " + prevB + " ="
-				// displayPreviewEl.innerHTML = answer + " " + operatorSymbol + " " + prevB + " ="
+		// 		// update preview (after equal)
+		// 		displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol + " " + prevB + " ="
+		// 		// displayPreviewEl.innerHTML = answer + " " + operatorSymbol + " " + prevB + " ="
 
-				prevAnswer = answer
-				// answer = undefined
-			}
+		// 		prevAnswer = answer
+		// 	}
 
-		} else {
+		// } else {
 
-			// default
-			if (a && b && operator) {
+		// 	// default
+		// 	if (a && b && operator) {
 
-				answer = operate(operator, a, b)
-				a = answer
-				displayEl.innerHTML = answer
+		// 		answer = operate(operator, a, b)
+		// 		a = answer
+		// 		displayEl.innerHTML = answer
 
-				// update preview (after equal)
-				displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol + " " + b + " ="
-				// displayPreviewEl.innerHTML = answer + " " + operatorSymbol + " " + b + " ="
+		// 		// update preview (after equal)
+		// 		displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol + " " + b + " ="
+		// 		// displayPreviewEl.innerHTML = answer + " " + operatorSymbol + " " + b + " ="
 
-				prevAnswer = answer
-				// answer = undefined
+		// 		prevAnswer = answer
 
-				prevB = b
-				b = undefined
-			}
+		// 		prevB = b
+		// 		b = undefined
+		// 	}
+		// }
+
+		// default
+		if (a && b && operator) {
+
+			prevA = a
+
+			answer = operate(operator, a, b)
+			a = answer
+			displayEl.innerHTML = answer
+			displayPreviewEl.innerHTML = prevA + " " + operatorSymbol + " " + b + " ="
+
+			prevAnswer = answer
+
+			prevB = b
+			b = undefined
 		}
 
 		// check if answer has decimal
-		if (answer && answer.includes(".")) {
+		// if (answer && answer.includes(".")) {
+		// 	bufferHasDecimal = true
+		// } else bufferHasDecimal = false
+
+		if (answer && answer % 1 !== 0) {
 			bufferHasDecimal = true
-		} else bufferHasDecimal = false
+		} else if (answer && answer % 1 == 0) {
+			bufferHasDecimal = false
+		}
+		else bufferHasDecimal = undefined
 
 		testLog()
 	})
 
 
-	clear.addEventListener("click", () => {
-		a = undefined
-		b = undefined
-		operator = undefined
-		answer = undefined
-		operatorSymbol = undefined
-		buffer = ""
-		prevB = undefined
-		prevAnswer = undefined
-		displayEl.innerHTML = "0"
-		firstInputAfterOperator = false
-		displayPreviewEl.innerHTML = ""
-		bufferHasDecimal = false
 
-		testLog()
-	})
 
 
 	negative.addEventListener("click", () => {
@@ -316,36 +331,57 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 
 
+	clear.addEventListener("click", () => {
+		a = undefined
+		b = undefined
+		operator = undefined
+		answer = undefined
+		operatorSymbol = undefined
+		buffer = "0"
+		prevA = undefined
+		prevB = undefined
+		prevAnswer = undefined
+		displayEl.innerHTML = "0"
+		firstInputAfterOperator = false
+		displayPreviewEl.innerHTML = ""
+		bufferHasDecimal = undefined
 
+		testLog()
+	})
 
-	function updateDisplay(digit) {
-
-		// prevents displayEl showing 00000
-		if (buffer == "0" && buffer.length == 1) {
-			buffer = ""
-			buffer = buffer + digit
-			displayEl.innerHTML = buffer
-
-		} else {
-			buffer = buffer + digit
-			displayEl.innerHTML = buffer
-		}
-
-	}
 
 	function updateOperands() {
-		if (a === "" || a === undefined) {
-			a = buffer
-			buffer = ""
+		if (a === undefined) {
+
+			// trim extra zeroes
+			// a = buffer
+			a = Number(buffer)
+			// a = String(Number(buffer))
+
+			// if (!firstInputAfterOperator) {
+			// 	buffer = ""
+			// 	firstInputAfterOperator = false
+			// }
+
 		}
-		else {
-			b = buffer
-			buffer = ""
+		else if (a && b === undefined) {
+			// b = buffer
+			b = Number(buffer)
+			// b = String(Number(buffer))
+
+			// if (!firstInputAfterOperator) {
+			// 	buffer = ""
+			// 	firstInputAfterOperator = false
+			// }
 		}
+		else throw new Error("updateOperands function did not updated values");
+
 	}
 
 
 	function testLog() {
+		console.log("displayEl.innerHTML: ", displayEl.innerHTML);
+
 		console.log("buffer: ", buffer);
 		console.log("a: ", a);
 		console.log("b: ", b);
@@ -353,10 +389,12 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		// console.log("operator: ", operator);
 		console.log("answer: ", answer);
 		console.log("prevAnswer: ", prevAnswer);
+		console.log("prevA: ", prevA);
 		console.log("prevB: ", prevB);
 		console.log("bufferHasDecimal: ", bufferHasDecimal);
-		console.log("displayEl.innerHTML: ", displayEl.innerHTML);
 		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
+		console.log("displayPreviewEl.innerHTML: ", displayPreviewEl.innerHTML);
+
 		console.log("--------------------------");
 	}
 
