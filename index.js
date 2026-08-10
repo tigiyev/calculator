@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let prevB
 	let prevAnswer
 	let operatorSymbol
-	// let numberIsNegative = false
 
 	let displayEl = document.querySelector(".calc__display__content")
 	let displayPreviewEl = document.querySelector(".calc__display__preview")
@@ -20,8 +19,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let equal = document.querySelector("[calc-role='equal']")
 	let clear = document.querySelector("[calc-role='clear']")
 	let negative = document.querySelector("[calc-role='negative']")
+	let decimal = document.querySelector("[calc-role='decimal']")
 
 	let firstInputAfterOperator = false
+	let bufferHasDecimal = false
+
+	let decimalSymbol = "."
+	// if this going to change, have to make internal decimal convertor
+	// JS only works with .
 
 
 	testLog()
@@ -86,12 +91,23 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		})
 	})
 
+
 	operators.forEach(e => {
 		e.addEventListener('click', () => {
 
 			firstInputAfterOperator = true
 
+			// trim extra zeroes
+			// clear buffer 0.000 => 0
+			// remove extra zeros 0.2000 => 0.2
+			buffer = Number(buffer)
+			buffer = String(buffer)
+
+
 			updateOperands()
+
+			// to fix bug where first time entered a is not trimed from zeros 
+			displayEl.innerHTML = a
 
 			// setting first time previous answer for display preview
 			// if (prevAnswer === undefined) {
@@ -103,14 +119,26 @@ document.addEventListener("DOMContentLoaded", (e) => {
 				a = "0"
 			}
 
+			// it works 	ex. 2+2+2
 			if (a && b && operator) {
 
+				// debugger
 				answer = operate(operator, a, b)
+
+				// ????
+				// this does not work yet because b can not be with decimal yet
+				// turn 0. to 0 after pressing operator
+				// if (answer[answer.length - 1] === decimalSymbol) {
+				// 	alert("ho")
+				// 	answer = answer.slice([answer.length])
+				// 	bufferHasDecimal = false
+				// }
+				// ????
+
 				a = answer
 				displayEl.innerHTML = answer
 
 				b = undefined
-				// answer = undefined
 			}
 
 
@@ -132,13 +160,25 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			displayPreviewEl.innerHTML = a + " " + operatorSymbol
 
 
+			if (buffer.includes(".")) {
+				bufferHasDecimal = true
+			} else bufferHasDecimal = false
+
+
+
+
+
 			testLog()
 		})
 	})
 
+
 	equal.addEventListener("click", () => {
 
 		firstInputAfterOperator = true
+
+		buffer = Number(buffer)
+		buffer = String(buffer)
 
 		updateOperands()
 
@@ -154,6 +194,12 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 		// repeat last action if b is absent on pressing equal
 		if (b === "" || b === undefined) {
+
+			// when pressing = in the start
+			if (b === undefined) {
+				displayPreviewEl.innerHTML = "0 ="
+			}
+
 
 			// use previous b
 			if (a && prevB && operator) {
@@ -191,9 +237,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			}
 		}
 
+		// check if answer has decimal
+		if (answer && answer.includes(".")) {
+			bufferHasDecimal = true
+		} else bufferHasDecimal = false
 
 		testLog()
 	})
+
 
 	clear.addEventListener("click", () => {
 		a = undefined
@@ -207,15 +258,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		displayEl.innerHTML = "0"
 		firstInputAfterOperator = false
 		displayPreviewEl.innerHTML = ""
-		// numberIsNegative = false
+		bufferHasDecimal = false
 
 		testLog()
 	})
 
+
 	negative.addEventListener("click", () => {
 
-
-		// numberIsNegative = !numberIsNegative
 		displayEl.innerHTML = String(-displayEl.innerHTML)
 
 		if (buffer !== "") {
@@ -223,7 +273,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		}
 
 		if (a !== undefined) {
-
 			if (buffer == "") {
 				a = String(-a)
 			}
@@ -231,6 +280,41 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 		testLog()
 	})
+
+
+	decimal.addEventListener("click", () => {
+
+
+		if (!bufferHasDecimal) {
+
+			// prevents bug when starting from typing . without 0
+			if (buffer === "") {
+				buffer = 0
+			}
+
+			displayEl.innerHTML = displayEl.innerHTML + decimalSymbol
+			buffer = buffer + decimalSymbol
+
+			bufferHasDecimal = true
+
+
+			// clear display after equal press .
+			if (firstInputAfterOperator) {
+				displayEl.innerHTML = "0."
+
+				// update preview (after decimal button)
+				displayPreviewEl.innerHTML = a + " " + operatorSymbol
+			}
+
+		}
+
+
+		testLog()
+	})
+
+
+
+
 
 
 
@@ -270,9 +354,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		console.log("answer: ", answer);
 		console.log("prevAnswer: ", prevAnswer);
 		console.log("prevB: ", prevB);
-		// console.log("displayEl: ", displayEl);
-		// console.log("firstInputAfterOperator: ", firstInputAfterOperator);
-		// console.log("numberIsNegative: ", numberIsNegative);
+		console.log("bufferHasDecimal: ", bufferHasDecimal);
+		console.log("displayEl.innerHTML: ", displayEl.innerHTML);
+		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 		console.log("--------------------------");
 	}
 
