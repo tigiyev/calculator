@@ -1,6 +1,8 @@
 ## todo
 
-- bug 3.2 + 0.1 = 3.3000000000000003
+- maybe make number conversion string to number only one time when change from buffer to a or b 
+
+- bug 0.2 + 0.1 = 0.3000000000000003
 
 - bug = 1+1= (1)
 - bug 1.0 + 2 = =

@@ -122,7 +122,7 @@ p {
 // base
 
 body {
-	background-color: #1e1e1e;
+	background-color: #171717;
 }
 
 .calc-wr {
@@ -131,13 +131,14 @@ body {
 
 .calc {
 	margin: auto;
-	padding: 8px;
+	padding: 12px;
 
 	width: 340px;
 	// height: 440px;
 
 	font-family: monospace;
 	background: #292929;
+	background: #202020;
 	color: #d9d9d9;
 	border: 1px solid #3e3e3e;
 	border-radius: 8px;
@@ -145,24 +146,29 @@ body {
 	&__content {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 24px;
+		// gap: 24px;
 	}
 
 	&__display {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: flex-end;
+		align-content: center;
 		align-items: center;
 		width: 100%;
-		height: 84px;
+		// height: 84px;
+		// height: 8*12px;
 		font-size: 32px;
 		line-height: 32px;
 		text-align: right;
 		border-radius: 4px;
-		padding: 8px;
+		padding: 32px 8px;
+		gap: 8px;
 
-		border: 1px solid #3e3e3e;
-		background-color: #212121;
+
+
+		// border: 1px solid #3e3e3e;
+		// background-color: #212121;
 
 		&__preview {
 			width: 100%;
@@ -170,10 +176,14 @@ body {
 			justify-content: right;
 			align-items: center;
 
-			font-size: 16px;
-			line-height: 16px;
+			font-size: 18px;
+			line-height: 18px;
+			min-height: 18px;
 
-			height: 24px;
+			// height: 24px;
+			opacity: .75;
+			font-weight: lighter;
+			letter-spacing: -1px;
 		}
 
 		&__content {
@@ -181,7 +191,11 @@ body {
 			display: flex;
 			justify-content: right;
 			align-items: center;
-			height: 44px;
+			// height: 44px;
+
+			font-size: 42px;
+			line-height: 42px;
+			font-weight: bold;
 		}
 	}
 
@@ -200,14 +214,10 @@ body {
 	}
 
 	&__btn {
-		// padding: 8px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		border: 1px solid #3e3e3e;
-
-		// min-height: 48px;
-		// min-width: 48px;
+		background: #292929;
 		width: 100%;
 		font-size: 28px;
 		line-height: 28px;

@@ -115,7 +115,7 @@ p {
 }
 
 body {
-  background-color: #1e1e1e;
+  background-color: #171717;
 }
 
 .calc-wr {
@@ -124,10 +124,11 @@ body {
 
 .calc {
   margin: auto;
-  padding: 8px;
+  padding: 12px;
   width: 340px;
   font-family: monospace;
   background: #292929;
+  background: #202020;
   color: #d9d9d9;
   border: 1px solid #3e3e3e;
   border-radius: 8px;
@@ -135,38 +136,41 @@ body {
 .calc__content {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
 }
 .calc__display {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
+  align-content: center;
   align-items: center;
   width: 100%;
-  height: 84px;
   font-size: 32px;
   line-height: 32px;
   text-align: right;
   border-radius: 4px;
-  padding: 8px;
-  border: 1px solid #3e3e3e;
-  background-color: #212121;
+  padding: 32px 8px;
+  gap: 8px;
 }
 .calc__display__preview {
   width: 100%;
   display: flex;
   justify-content: right;
   align-items: center;
-  font-size: 16px;
-  line-height: 16px;
-  height: 24px;
+  font-size: 18px;
+  line-height: 18px;
+  min-height: 18px;
+  opacity: 0.75;
+  font-weight: lighter;
+  letter-spacing: -1px;
 }
 .calc__display__content {
   width: 100%;
   display: flex;
   justify-content: right;
   align-items: center;
-  height: 44px;
+  font-size: 42px;
+  line-height: 42px;
+  font-weight: bold;
 }
 .calc__inputs {
   width: 100%;
@@ -184,7 +188,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #3e3e3e;
+  background: #292929;
   width: 100%;
   font-size: 28px;
   line-height: 28px;
