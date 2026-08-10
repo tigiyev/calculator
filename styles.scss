@@ -139,8 +139,8 @@ body {
 	font-family: monospace;
 	background: #292929;
 	background: #202020;
-	color: #d9d9d9;
-	border: 1px solid #3e3e3e;
+	color: #eeeeee;
+	border: 1px solid #2d2d2d;
 	border-radius: 8px;
 
 	&__content {
@@ -245,11 +245,11 @@ body {
 		}
 
 		&_equal {
-			background-color: #417cd9;
+			background-color: #4388f9;
 			color: #1e1e1e;
 
 			&:hover {
-				background-color: #3d74cd;
+				background-color: rgb(97, 157, 254);
 			}
 		}
 
