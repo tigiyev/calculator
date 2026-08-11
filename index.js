@@ -6,12 +6,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let b
 	let operator
 	let answer
-	let buffer = "0"
+	let buffer
 	// recently changed
 	let prevA
 	let prevB
 	let prevAnswer
 	let operatorSymbol
+	// let lastButtonPressed
+	let lastButtonTypePressed
 
 	let displayEl = document.querySelector(".calc__display__content")
 	let displayPreviewEl = document.querySelector(".calc__display__preview")
@@ -23,9 +25,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let negative = document.querySelector("[calc-role='negative']")
 	let decimal = document.querySelector("[calc-role='decimal']")
 
-	let firstInputAfterOperator = false
+	// let firstInputAfterOperator = false
 	let bufferHasDecimal = undefined
-
 	let decimalSymbol = "."
 	// if this going to change, have to make internal decimal convertor
 	// JS only works with .
@@ -86,11 +87,22 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 			let digit = e.getAttribute("calc-digit")
 
+			if (buffer === undefined) {
+				buffer = ""
+			}
+
+
 			// clear display after firts selected operator
-			if (firstInputAfterOperator) {
+			// if (firstInputAfterOperator) {
+			// 	displayEl.innerHTML = ""
+			// 	buffer = ""
+			// 	firstInputAfterOperator = false
+			// }
+
+			if (lastButtonTypePressed === "operator") {
 				displayEl.innerHTML = ""
 				buffer = ""
-				firstInputAfterOperator = false
+				// firstInputAfterOperator = false
 			}
 
 			// prevents displayEl showing 00000
@@ -104,6 +116,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
 				displayEl.innerHTML = buffer
 			}
 
+			lastButtonTypePressed = "digit"
+
 			testLog()
 		})
 	})
@@ -111,19 +125,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	operators.forEach(e => {
 		e.addEventListener('click', () => {
-			debugger
+			// debugger
 
-			firstInputAfterOperator = true
+			// firstInputAfterOperator = true
+
+			// if (lastButtonTypePressed == "equal") {
 
 			updateOperands()
-
-			// if (a === undefined) {
-			// 	a = Number(buffer)
-			// } else if (b === undefined) {
-			// 	b = Number(buffer)
 			// }
-
-
 
 
 			// to fix bug where first time entered a is not trimed from zeros 
@@ -140,7 +149,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			// comes before operator switch to calculate correctly 12+*2+ 
 			// ???
 			// !!! do not fill b until digits are inputed 
-			if (a && b && operator) {
+			if (a && b && operator && lastButtonTypePressed !== "operator" && lastButtonTypePressed !== "equal") {
 
 				// debugger
 				prevA = a
@@ -151,6 +160,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 				b = undefined
 			}
+
 
 
 			switch (e.getAttribute("calc-operator")) {
@@ -178,6 +188,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			// 	bufferHasDecimal = false
 			// } else bufferHasDecimal = undefined
 
+			lastButtonTypePressed = "operator"
 
 			testLog()
 		})
@@ -187,7 +198,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	equal.addEventListener("click", () => {
 		// debugger
 
-		firstInputAfterOperator = true
+		// firstInputAfterOperator = true
 
 		updateOperands()
 
@@ -201,76 +212,37 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		// 	prevB = a
 		// }
 
-		// repeat last action if b is absent on pressing equal
-		// if (b === undefined) {
 
-		// 	// when pressing = in the start
-		// 	if (b === undefined) {
-		// 		displayPreviewEl.innerHTML = "0 ="
-		// 	}
-
-
-		// 	// use previous b
-		// 	if (a && prevB && operator) {
-
-		// 		answer = operate(operator, a, prevB)
-		// 		a = answer
-		// 		displayEl.innerHTML = answer
-
-		// 		// update preview (after equal)
-		// 		displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol + " " + prevB + " ="
-		// 		// displayPreviewEl.innerHTML = answer + " " + operatorSymbol + " " + prevB + " ="
-
-		// 		prevAnswer = answer
-		// 	}
-
-		// } else {
-
-		// 	// default
-		// 	if (a && b && operator) {
-
-		// 		answer = operate(operator, a, b)
-		// 		a = answer
-		// 		displayEl.innerHTML = answer
-
-		// 		// update preview (after equal)
-		// 		displayPreviewEl.innerHTML = prevAnswer + " " + operatorSymbol + " " + b + " ="
-		// 		// displayPreviewEl.innerHTML = answer + " " + operatorSymbol + " " + b + " ="
-
-		// 		prevAnswer = answer
-
-		// 		prevB = b
-		// 		b = undefined
-		// 	}
-		// }
-
-		// default
 		if (a && b && operator) {
 
 			prevA = a
+			prevB = b
 
 			answer = operate(operator, a, b)
 			a = answer
+			prevAnswer = answer
+
 			displayEl.innerHTML = answer
 			displayPreviewEl.innerHTML = prevA + " " + operatorSymbol + " " + b + " ="
 
-			prevAnswer = answer
 
-			prevB = b
+			// // 
+			// buffer = undefined
+			// // 
 			b = undefined
 		}
 
-		// check if answer has decimal
-		// if (answer && answer.includes(".")) {
-		// 	bufferHasDecimal = true
-		// } else bufferHasDecimal = false
 
+		// check if answer has decimal
 		if (answer && answer % 1 !== 0) {
 			bufferHasDecimal = true
 		} else if (answer && answer % 1 == 0) {
 			bufferHasDecimal = false
 		}
 		else bufferHasDecimal = undefined
+
+
+		lastButtonTypePressed = "equal"
 
 		testLog()
 	})
@@ -281,17 +253,26 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	negative.addEventListener("click", () => {
 
-		displayEl.innerHTML = String(-displayEl.innerHTML)
+		if (buffer !== "0") {
 
-		if (buffer !== "") {
+			displayEl.innerHTML = String(-displayEl.innerHTML)
 			buffer = String(-buffer)
+
+			// a = String(-a)
 		}
 
-		if (a !== undefined) {
-			if (buffer == "") {
-				a = String(-a)
-			}
+		// if (a !== undefined) {
+		// 	// debugger
+		// 	if (buffer == "") {
+		// 		a = String(-a)
+		// 	}
+		// }
+
+		if (lastButtonTypePressed === "equal") {
+			displayPreviewEl.innerHTML = `negate(${prevA})`
 		}
+
+		// lastButtonTypePressed = "negative"
 
 		testLog()
 	})
@@ -314,7 +295,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 
 			// clear display after equal press .
-			if (firstInputAfterOperator) {
+			if (lastButtonTypePressed === "equal") {
 				displayEl.innerHTML = "0."
 
 				// update preview (after decimal button)
@@ -337,44 +318,29 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		operator = undefined
 		answer = undefined
 		operatorSymbol = undefined
-		buffer = "0"
+		buffer = undefined
 		prevA = undefined
 		prevB = undefined
 		prevAnswer = undefined
 		displayEl.innerHTML = "0"
-		firstInputAfterOperator = false
+		// firstInputAfterOperator = false
 		displayPreviewEl.innerHTML = ""
 		bufferHasDecimal = undefined
+		lastButtonTypePressed = undefined
 
 		testLog()
 	})
 
 
 	function updateOperands() {
+
 		if (a === undefined) {
-
-			// trim extra zeroes
-			// a = buffer
 			a = Number(buffer)
-			// a = String(Number(buffer))
-
-			// if (!firstInputAfterOperator) {
-			// 	buffer = ""
-			// 	firstInputAfterOperator = false
-			// }
-
-		}
-		else if (a && b === undefined) {
-			// b = buffer
+			buffer = undefined
+		} else {
 			b = Number(buffer)
-			// b = String(Number(buffer))
-
-			// if (!firstInputAfterOperator) {
-			// 	buffer = ""
-			// 	firstInputAfterOperator = false
-			// }
+			buffer = undefined
 		}
-		else throw new Error("updateOperands function did not updated values");
 
 	}
 
@@ -392,8 +358,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		console.log("prevA: ", prevA);
 		console.log("prevB: ", prevB);
 		console.log("bufferHasDecimal: ", bufferHasDecimal);
-		console.log("firstInputAfterOperator: ", firstInputAfterOperator);
+		// console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 		console.log("displayPreviewEl.innerHTML: ", displayPreviewEl.innerHTML);
+		console.log("lastButtonTypePressed: ", lastButtonTypePressed);
 
 		console.log("--------------------------");
 	}
