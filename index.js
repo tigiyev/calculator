@@ -127,12 +127,11 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		e.addEventListener('click', () => {
 			// debugger
 
-			// firstInputAfterOperator = true
+			if (buffer) {
+				updateOperands()
+			}
 
-			// if (lastButtonTypePressed == "equal") {
-
-			updateOperands()
-			// }
+			// b = a
 
 
 			// to fix bug where first time entered a is not trimed from zeros 
@@ -146,10 +145,22 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 
 			// for calculating without = 		ex. 2+2+2
-			// comes before operator switch to calculate correctly 12+*2+ 
+			// comes before operator switch to calculate correctly 12+*2+ (24)
 			// ???
 			// !!! do not fill b until digits are inputed 
-			if (a && b && operator && lastButtonTypePressed !== "operator" && lastButtonTypePressed !== "equal") {
+			// if (a && b && operator && lastButtonTypePressed !== "operator" && lastButtonTypePressed !== "equal") {
+
+			// 	// debugger
+			// 	prevA = a
+
+			// 	answer = operate(operator, a, b)
+			// 	a = answer
+			// 	displayEl.innerHTML = answer
+
+			// 	b = undefined
+			// }
+
+			if (Number.isInteger(a) && Number.isInteger(b) && operator) {
 
 				// debugger
 				prevA = a
@@ -160,8 +171,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 				b = undefined
 			}
-
-
 
 			switch (e.getAttribute("calc-operator")) {
 				case "division": operator = "division", operatorSymbol = "÷"
@@ -198,10 +207,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	equal.addEventListener("click", () => {
 		// debugger
 
-		// firstInputAfterOperator = true
-
-		updateOperands()
-
 		// setting first time previous answer for display preview
 		// if (prevAnswer === undefined) {
 		// 	prevAnswer = a
@@ -213,24 +218,59 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		// }
 
 
-		if (a && b && operator) {
+		if (buffer) {
+			// a + b
+
+			updateOperands()
+
+			if (Number.isInteger(a) && Number.isInteger(b) && operator) {
+
+				prevA = a
+				prevB = b
+
+				answer = operate(operator, a, b)
+				a = answer
+				prevAnswer = answer
+
+				displayEl.innerHTML = answer
+				displayPreviewEl.innerHTML = prevA + " " + operatorSymbol + " " + b + " ="
+
+				b = undefined
+			}
+
+		} else if (Number.isInteger(a) && b === undefined && operator && Number.isInteger(prevB)) {
+			// a + b? => prevB
+			// ex. 5-===
 
 			prevA = a
-			prevB = b
+			// prevB = b
 
-			answer = operate(operator, a, b)
+			answer = operate(operator, a, prevB)
 			a = answer
 			prevAnswer = answer
 
 			displayEl.innerHTML = answer
-			displayPreviewEl.innerHTML = prevA + " " + operatorSymbol + " " + b + " ="
+			displayPreviewEl.innerHTML = prevA + " " + operatorSymbol + " " + prevB + " ="
 
+			// b = undefined
 
-			// // 
-			// buffer = undefined
-			// // 
-			b = undefined
+		} else if (Number.isInteger(a) && b === undefined && operator && prevB === undefined) {
+			// a + b? and prevB? (start of the cicle when prevB not defined)
+			// ex. 5-=
+
+			prevA = a
+			prevB = a
+
+			answer = operate(operator, a, a)
+			a = answer
+			prevAnswer = answer
+
+			displayEl.innerHTML = answer
+			displayPreviewEl.innerHTML = prevA + " " + operatorSymbol + " " + prevB + " ="
+
 		}
+
+
 
 
 		// check if answer has decimal
@@ -346,20 +386,20 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 
 	function testLog() {
-		console.log("displayEl.innerHTML: ", displayEl.innerHTML);
+
 
 		console.log("buffer: ", buffer);
 		console.log("a: ", a);
 		console.log("b: ", b);
 		console.log("operatorSymbol: ", operatorSymbol);
-		// console.log("operator: ", operator);
+		console.log("operator: ", operator);
 		console.log("answer: ", answer);
 		console.log("prevAnswer: ", prevAnswer);
 		console.log("prevA: ", prevA);
 		console.log("prevB: ", prevB);
 		console.log("bufferHasDecimal: ", bufferHasDecimal);
-		// console.log("firstInputAfterOperator: ", firstInputAfterOperator);
 		console.log("displayPreviewEl.innerHTML: ", displayPreviewEl.innerHTML);
+		console.log("displayEl.innerHTML: ", displayEl.innerHTML);
 		console.log("lastButtonTypePressed: ", lastButtonTypePressed);
 
 		console.log("--------------------------");

@@ -1,10 +1,23 @@
 ## Notes
 
+- buffer is current number stored in memory
+- buffer is NOT always equal to innerHTML
+- buffer default state is undefined
 
-buffer default state is "" not undefined??
 
-buffer is NOT always equal to innerHTML
-it stores last value similar to prevB?? (no, they have different roles)
+## Tests. Basics
+
++ 000 (0)
++ = (0)
+- * (preview 0 *)
++ 1+2= (3)
++ 1+2== (5)
++ 5-= (0)
++ 5-== (-5)
++ 5-*2+ (10)
++ 5-=+ (0)
+- 5-=+= (0)
+
 
 
 
@@ -38,7 +51,3 @@ it stores last value similar to prevB?? (no, they have different roles)
 - add keyboard input
 
 
-
-## Ideas
-~ maybe make number conversion string to number only one time when change from buffer to a or b 
-(no, there is a lot of logic on a and b = "")
