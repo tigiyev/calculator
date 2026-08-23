@@ -5,15 +5,18 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let a
 	let b
 	let operator
+	let operatorSymbol
 	let answer
 	let buffer
-	// recently changed
 	let prevA
 	let prevB
 	let prevAnswer
-	let operatorSymbol
-	// let lastButtonPressed
 	let lastButtonTypePressed
+
+	let bufferHasDecimal = undefined
+	let decimalSymbol = "."
+	// if this going to change, have to make internal decimal convertor
+	// JS only works with .
 
 	let displayEl = document.querySelector(".calc__display__content")
 	let displayPreviewEl = document.querySelector(".calc__display__preview")
@@ -25,11 +28,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let negative = document.querySelector("[calc-role='negative']")
 	let decimal = document.querySelector("[calc-role='decimal']")
 
-	// let firstInputAfterOperator = false
-	let bufferHasDecimal = undefined
-	let decimalSymbol = "."
-	// if this going to change, have to make internal decimal convertor
-	// JS only works with .
+
 
 
 	testLog()
@@ -131,34 +130,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 				updateOperands()
 			}
 
-			// b = a
-
-
-			// to fix bug where first time entered a is not trimed from zeros 
-			// displayEl.innerHTML = a
-
-
-			// fix bug with wrong display when a is empty in the start 
-			// if (a === undefined || a === "") {
-			// 	a = "0"
-			// }
-
-
-			// for calculating without = 		ex. 2+2+2
-			// comes before operator switch to calculate correctly 12+*2+ (24)
-			// ???
-			// !!! do not fill b until digits are inputed 
-			// if (a && b && operator && lastButtonTypePressed !== "operator" && lastButtonTypePressed !== "equal") {
-
-			// 	// debugger
-			// 	prevA = a
-
-			// 	answer = operate(operator, a, b)
-			// 	a = answer
-			// 	displayEl.innerHTML = answer
-
-			// 	b = undefined
-			// }
 
 			if (Number.isInteger(a) && Number.isInteger(b) && operator) {
 
@@ -181,6 +152,12 @@ document.addEventListener("DOMContentLoaded", (e) => {
 					break
 				case "add": operator = "add", operatorSymbol = "+"
 					break
+			}
+
+			// fix bug with wrong display when a is empty in the start 
+			// * (preview 0 *)
+			if (a === undefined) {
+				a = 0
 			}
 
 
@@ -207,17 +184,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	equal.addEventListener("click", () => {
 		// debugger
 
-		// setting first time previous answer for display preview
-		// if (prevAnswer === undefined) {
-		// 	prevAnswer = a
-		// }
-
-		// setting default previousB
-		// if (prevB === undefined) {
-		// 	prevB = a
-		// }
-
-
 		if (buffer) {
 			// a + b
 
@@ -241,6 +207,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		} else if (Number.isInteger(a) && b === undefined && operator && Number.isInteger(prevB)) {
 			// a + b? => prevB
 			// ex. 5-===
+			// debugger
 
 			prevA = a
 			// prevB = b
@@ -257,17 +224,17 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		} else if (Number.isInteger(a) && b === undefined && operator && prevB === undefined) {
 			// a + b? and prevB? (start of the cicle when prevB not defined)
 			// ex. 5-=
+			// debugger
 
 			prevA = a
-			prevB = a
+			// prevB = a
 
 			answer = operate(operator, a, a)
 			a = answer
 			prevAnswer = answer
 
 			displayEl.innerHTML = answer
-			displayPreviewEl.innerHTML = prevA + " " + operatorSymbol + " " + prevB + " ="
-
+			displayPreviewEl.innerHTML = prevA + " " + operatorSymbol + " " + a + " ="
 		}
 
 
