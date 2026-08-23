@@ -255,34 +255,113 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	})
 
 
-
-
-
 	negative.addEventListener("click", () => {
 
-		if (buffer !== "0") {
+		// if (buffer !== undefined) {
 
-			displayEl.innerHTML = String(-displayEl.innerHTML)
-			buffer = String(-buffer)
 
-			// a = String(-a)
-		}
+		// 	if (a === undefined) {
 
-		// if (a !== undefined) {
-		// 	// debugger
-		// 	if (buffer == "") {
-		// 		a = String(-a)
+		// 		if (buffer[0] !== "-") {
+		// 			buffer = "-" + buffer
+		// 			displayEl.innerHTML = "-" + displayEl.innerHTML
+
+		// 		} else if (buffer[0] === "-") {
+		// 			buffer = buffer.slice(1)
+		// 			displayEl.innerHTML = displayEl.innerHTML.slice(1)
+		// 		}
+		// 	} else {
+		// 		console.log("hello");
+		// 		a = -a
+		// 		if (displayEl.innerHTML[0] !== "-") {
+		// 			displayEl.innerHTML = "-" + displayEl.innerHTML
+		// 		} else {
+		// 			displayEl.innerHTML = displayEl.innerHTML.slice(1)
+		// 		}
+		// 	}
+
+
+		// } else {
+
+		// 	if (Number.isInteger(a)) {
+
+		// 		a = -a
+		// 		if (displayEl.innerHTML[0] !== "-") {
+		// 			displayEl.innerHTML = "-" + displayEl.innerHTML
+		// 		} else {
+		// 			displayEl.innerHTML = displayEl.innerHTML.slice(1)
+		// 		}
 		// 	}
 		// }
 
-		if (lastButtonTypePressed === "equal") {
-			displayPreviewEl.innerHTML = `negate(${prevA})`
+
+
+
+
+
+		// if (buffer !== undefined && a === undefined) {
+
+		// 	if (buffer[0] !== "-") {
+		// 		buffer = "-" + buffer
+		// 		displayEl.innerHTML = "-" + displayEl.innerHTML
+
+		// 	} else if (buffer[0] === "-") {
+		// 		buffer = buffer.slice(1)
+		// 		displayEl.innerHTML = displayEl.innerHTML.slice(1)
+		// 	}
+
+		// } else if (buffer === undefined && Number.isInteger(a)) {
+		// 	a = -a
+		// 	if (displayEl.innerHTML[0] !== "-") {
+		// 		displayEl.innerHTML = "-" + displayEl.innerHTML
+		// 	} else {
+		// 		displayEl.innerHTML = displayEl.innerHTML.slice(1)
+		// 	}
+		// } else if (buffer !== undefined && Number.isInteger(a)) {
+		// 	console.log("hello");
+		// 	if (buffer[0] !== "-") {
+		// 		buffer = "-" + buffer
+		// 		displayEl.innerHTML = "-" + displayEl.innerHTML
+
+		// 	} else if (buffer[0] === "-") {
+		// 		buffer = buffer.slice(1)
+		// 		displayEl.innerHTML = displayEl.innerHTML.slice(1)
+		// 	}
+		// }
+
+		// prevA should be changed too??
+		if (buffer !== undefined) {
+
+			if (buffer[0] !== "-") {
+				buffer = "-" + buffer
+				displayEl.innerHTML = "-" + displayEl.innerHTML
+
+			} else if (buffer[0] === "-") {
+				buffer = buffer.slice(1)
+				displayEl.innerHTML = displayEl.innerHTML.slice(1)
+			}
+
+		} else if (buffer === undefined && Number.isInteger(a)) {
+			a = -a
+			// prevA = - prevA
+			if (displayEl.innerHTML[0] !== "-") {
+				displayEl.innerHTML = "-" + displayEl.innerHTML
+			} else {
+				displayEl.innerHTML = displayEl.innerHTML.slice(1)
+			}
 		}
 
-		// lastButtonTypePressed = "negative"
+
+
+
+
+
+
 
 		testLog()
 	})
+
+
 
 
 	decimal.addEventListener("click", () => {
@@ -323,14 +402,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		a = undefined
 		b = undefined
 		operator = undefined
-		answer = undefined
 		operatorSymbol = undefined
+		answer = undefined
 		buffer = undefined
 		prevA = undefined
 		prevB = undefined
 		prevAnswer = undefined
 		displayEl.innerHTML = "0"
-		// firstInputAfterOperator = false
 		displayPreviewEl.innerHTML = ""
 		bufferHasDecimal = undefined
 		lastButtonTypePressed = undefined
@@ -353,8 +431,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 
 	function testLog() {
-
-
 		console.log("buffer: ", buffer);
 		console.log("a: ", a);
 		console.log("b: ", b);
@@ -368,7 +444,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		console.log("displayPreviewEl.innerHTML: ", displayPreviewEl.innerHTML);
 		console.log("displayEl.innerHTML: ", displayEl.innerHTML);
 		console.log("lastButtonTypePressed: ", lastButtonTypePressed);
-
 		console.log("--------------------------");
 	}
 
