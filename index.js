@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let prevB
 	let prevAnswer
 	let lastButtonTypePressed
+	let previewIsNegated
 
 	let bufferHasDecimal = undefined
 	let decimalSymbol = "."
@@ -257,79 +258,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	negative.addEventListener("click", () => {
 
-		// if (buffer !== undefined) {
 
-
-		// 	if (a === undefined) {
-
-		// 		if (buffer[0] !== "-") {
-		// 			buffer = "-" + buffer
-		// 			displayEl.innerHTML = "-" + displayEl.innerHTML
-
-		// 		} else if (buffer[0] === "-") {
-		// 			buffer = buffer.slice(1)
-		// 			displayEl.innerHTML = displayEl.innerHTML.slice(1)
-		// 		}
-		// 	} else {
-		// 		console.log("hello");
-		// 		a = -a
-		// 		if (displayEl.innerHTML[0] !== "-") {
-		// 			displayEl.innerHTML = "-" + displayEl.innerHTML
-		// 		} else {
-		// 			displayEl.innerHTML = displayEl.innerHTML.slice(1)
-		// 		}
-		// 	}
-
-
-		// } else {
-
-		// 	if (Number.isInteger(a)) {
-
-		// 		a = -a
-		// 		if (displayEl.innerHTML[0] !== "-") {
-		// 			displayEl.innerHTML = "-" + displayEl.innerHTML
-		// 		} else {
-		// 			displayEl.innerHTML = displayEl.innerHTML.slice(1)
-		// 		}
-		// 	}
-		// }
-
-
-
-
-
-
-		// if (buffer !== undefined && a === undefined) {
-
-		// 	if (buffer[0] !== "-") {
-		// 		buffer = "-" + buffer
-		// 		displayEl.innerHTML = "-" + displayEl.innerHTML
-
-		// 	} else if (buffer[0] === "-") {
-		// 		buffer = buffer.slice(1)
-		// 		displayEl.innerHTML = displayEl.innerHTML.slice(1)
-		// 	}
-
-		// } else if (buffer === undefined && Number.isInteger(a)) {
-		// 	a = -a
-		// 	if (displayEl.innerHTML[0] !== "-") {
-		// 		displayEl.innerHTML = "-" + displayEl.innerHTML
-		// 	} else {
-		// 		displayEl.innerHTML = displayEl.innerHTML.slice(1)
-		// 	}
-		// } else if (buffer !== undefined && Number.isInteger(a)) {
-		// 	console.log("hello");
-		// 	if (buffer[0] !== "-") {
-		// 		buffer = "-" + buffer
-		// 		displayEl.innerHTML = "-" + displayEl.innerHTML
-
-		// 	} else if (buffer[0] === "-") {
-		// 		buffer = buffer.slice(1)
-		// 		displayEl.innerHTML = displayEl.innerHTML.slice(1)
-		// 	}
-		// }
-
-		// prevA should be changed too??
 		if (buffer !== undefined) {
 
 			if (buffer[0] !== "-") {
@@ -352,11 +281,21 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		}
 
 
+		// display preview negation
+		if (lastButtonTypePressed === "equal") {
+
+			if (!previewIsNegated) {
+				displayPreviewEl.innerHTML = `negate(${answer})`
+				previewIsNegated = true
+			} else {
+				displayPreviewEl.innerHTML = answer
+				previewIsNegated = false
+			}
+
+		}
 
 
-
-
-
+		// lastButtonTypePressed = "neg"
 
 		testLog()
 	})
@@ -412,6 +351,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		displayPreviewEl.innerHTML = ""
 		bufferHasDecimal = undefined
 		lastButtonTypePressed = undefined
+		previewIsNegated = undefined
 
 		testLog()
 	})
@@ -444,6 +384,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		console.log("displayPreviewEl.innerHTML: ", displayPreviewEl.innerHTML);
 		console.log("displayEl.innerHTML: ", displayEl.innerHTML);
 		console.log("lastButtonTypePressed: ", lastButtonTypePressed);
+		// console.log("lastPreview: ", lastPreview);
 		console.log("--------------------------");
 	}
 

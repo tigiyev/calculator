@@ -1,7 +1,7 @@
 ## Notes
 
 - buffer is current number stored in memory
-- buffer is NOT always equal to innerHTML
+- buffer is NOT always equal to display
 - buffer default state is undefined
 
 
@@ -21,10 +21,11 @@
 
 ## Test. Negative
 
-+ 5-6=neg		(-1)
-+ 5neg*8neg=		(40)
-- 5neg*8neg=neg		(-40)(preview negate(40))
-
++ 5-6=neg					(-1)
++ 5neg*8neg=				(40)
++ 5neg*8neg=neg			(-40)(preview negate(40))
++ 5neg*8neg=negneg		(40)(preview 40)
++ 1+2=neg=					(-1)
 
 
 
