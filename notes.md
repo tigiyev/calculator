@@ -26,9 +26,19 @@
 + 5neg*8neg=neg			(-40)(preview negate(40))
 + 5neg*8neg=negneg		(40)(preview 40)
 + 1+2=neg=					(-1)
+- 1/3neg=neg+5				(5,333333333333333)
+
+- sometimes preview and display are not equal
+e.g 43 and -43 after clicking neg multiple times
 
 
 
+## Test. Decimal
+- 1/3=+4 			(4,333333333333333)
+? calc functions does not work when a or b has long values 
+
+Number.isInteger(0.3333333333333333)
+!isNaN(0.3333333333333333)
 
 ## Bugs
 

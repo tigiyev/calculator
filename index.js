@@ -45,6 +45,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		return a * b
 	}
 	function division(a, b) {
+
+		console.log(String(a / b).length);
+
 		return a / b
 	}
 
@@ -54,6 +57,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		// b = "12"
 		// b = NaN
 		// operator = "asdasd"
+
 
 		if (typeof a === "number" && typeof b === "number") {
 
@@ -132,7 +136,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			}
 
 
-			if (Number.isInteger(a) && Number.isInteger(b) && operator) {
+			if (!isNaN(a) && !isNaN(b) && operator) {
 
 				// debugger
 				prevA = a
@@ -184,13 +188,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	equal.addEventListener("click", () => {
 		// debugger
+		// console.log("equal is pressed");
 
 		if (buffer) {
 			// a + b
 
 			updateOperands()
 
-			if (Number.isInteger(a) && Number.isInteger(b) && operator) {
+			if (!isNaN(a) && !isNaN(b) && operator) {
 
 				prevA = a
 				prevB = b
@@ -205,7 +210,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 				b = undefined
 			}
 
-		} else if (Number.isInteger(a) && b === undefined && operator && Number.isInteger(prevB)) {
+		} else if (!isNaN(a) && b === undefined && operator && !isNaN(prevB)) {
 			// a + b? => prevB
 			// ex. 5-===
 			// debugger
@@ -222,7 +227,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 			// b = undefined
 
-		} else if (Number.isInteger(a) && b === undefined && operator && prevB === undefined) {
+		} else if (!isNaN(a) && b === undefined && operator && prevB === undefined) {
 			// a + b? and prevB? (start of the cicle when prevB not defined)
 			// ex. 5-=
 			// debugger
@@ -252,6 +257,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 		lastButtonTypePressed = "equal"
 
+		console.log("equal func ended");
 		testLog()
 	})
 
@@ -270,7 +276,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 				displayEl.innerHTML = displayEl.innerHTML.slice(1)
 			}
 
-		} else if (buffer === undefined && Number.isInteger(a)) {
+		} else if (buffer === undefined && !isNaN(a)) {
 			a = -a
 			// prevA = - prevA
 			if (displayEl.innerHTML[0] !== "-") {
