@@ -31,6 +31,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 
 
+	console.log(1234567890123456789);
+	console.log(parseFloat("99999999999999999999999999999999999999999123"));
+	console.log(parseFloat("123456789012345678811112312399999999999999999999999999999999999999999123"));
 
 	testLog()
 
@@ -45,9 +48,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		return a * b
 	}
 	function division(a, b) {
-
-		console.log(String(a / b).length);
-
 		return a / b
 	}
 
@@ -58,24 +58,29 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		// b = NaN
 		// operator = "asdasd"
 
+		// a = parseFloat(a)
+		// b = parseFloat(b)
+
+		let operationResult
+
 
 		if (typeof a === "number" && typeof b === "number") {
 
 			switch (operator) {
 				case "add":
-					return add(a, b)
+					operationResult = add(a, b)
 					break;
 
 				case "subtract":
-					return subtract(a, b)
+					operationResult = subtract(a, b)
 					break;
 
 				case "multiply":
-					return multiply(a, b)
+					operationResult = multiply(a, b)
 					break;
 
 				case "division":
-					return division(a, b)
+					operationResult = division(a, b)
 					break;
 
 				default:
@@ -83,6 +88,18 @@ document.addEventListener("DOMContentLoaded", (e) => {
 					break;
 			}
 		} else throw new Error("a or b is not a number");
+
+		// debugger
+		// console.log("operationResult", operationResult);
+		// console.log(String(operationResult).length);
+
+
+		// if (String(operationResult).length > 13) {
+		// 	operationResult = Number(String(operationResult).slice(0, 13))
+		// }
+
+		return parseFloat(operationResult)
+		// return operationResult
 	}
 
 
@@ -130,6 +147,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	operators.forEach(e => {
 		e.addEventListener('click', () => {
 			// debugger
+
+			prevB = undefined
 
 			if (buffer) {
 				updateOperands()
@@ -233,14 +252,14 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			// debugger
 
 			prevA = a
-			// prevB = a
+			prevB = a
 
 			answer = operate(operator, a, a)
 			a = answer
 			prevAnswer = answer
 
 			displayEl.innerHTML = answer
-			displayPreviewEl.innerHTML = prevA + " " + operatorSymbol + " " + a + " ="
+			displayPreviewEl.innerHTML = prevA + " " + operatorSymbol + " " + prevB + " ="
 		}
 
 
@@ -257,7 +276,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 		lastButtonTypePressed = "equal"
 
-		console.log("equal func ended");
 		testLog()
 	})
 
