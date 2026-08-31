@@ -33,24 +33,21 @@ e.g 43 and -43 after clicking neg multiple times
 
 
 
-## Test. Decimal
+
+## Test. Long numbers
 - how many digits is max? (12)
-- 123456789 * 123456789
++ 123456789*123456789= 			(1.524158e+16)
 - 1/3= 		(0.33333333333)
-- 1/3=+4 			(4,333333333333333)
-? calc functions does not work when a or b has long values 
-
-
-
-
-## Bugs
-
 - bug 0.2 + 0.1 = 0.3000000000000003
 
-- bug 1.0 + 2 = =
-- bug 1.0 = (display preview shows 0 instead of 1)
-- bug 2.000 + (does not remove zeros from display first time )
-- bug 0. have to be turned to 0 if clicked on operators
+
+## Test. Decimal
+- 1..2		(1.2)
+- .2 			(0.2)
+- 1.0= 		(1)(preview 1=)
+- 1.000+ 	(1)(preview 1+)
+- 1+2=.		(0.)(preview empty)
+
 
 
 

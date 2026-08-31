@@ -29,11 +29,17 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let negative = document.querySelector("[calc-role='negative']")
 	let decimal = document.querySelector("[calc-role='decimal']")
 
+	// parseFloat does not convert to scientific notation
+	// what parseFloat do?
 
 
-	console.log(1234567890123456789);
-	console.log(parseFloat("99999999999999999999999999999999999999999123"));
-	console.log(parseFloat("123456789012345678811112312399999999999999999999999999999999999999999123"));
+
+	// let largeNumber = 1.524158e+16
+	// console.log(largeNumber);
+	// console.log(largeNumber.toExponential(6));
+	// console.log(parseFloat(largeNumber).toExponential(6));
+
+
 
 	testLog()
 
@@ -62,6 +68,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		// b = parseFloat(b)
 
 		let operationResult
+
+		a = Number(a)
+		b = Number(b)
 
 
 		if (typeof a === "number" && typeof b === "number") {
@@ -94,12 +103,12 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		// console.log(String(operationResult).length);
 
 
-		// if (String(operationResult).length > 13) {
-		// 	operationResult = Number(String(operationResult).slice(0, 13))
-		// }
+		if (String(operationResult).length > 12) {
+			// debugger
+			operationResult = operationResult.toExponential(6)
+		}
 
-		return parseFloat(operationResult)
-		// return operationResult
+		return operationResult
 	}
 
 
