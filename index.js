@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	let bufferHasDecimal = undefined
 	let decimalSymbol = "."
+	let displayMaxDigit = 12
 	// if this going to change, have to make internal decimal convertor
 	// JS only works with .
 
@@ -64,16 +65,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		// b = NaN
 		// operator = "asdasd"
 
-		// a = parseFloat(a)
-		// b = parseFloat(b)
-
 		let operationResult
 
 		a = Number(a)
 		b = Number(b)
 
 
-		if (typeof a === "number" && typeof b === "number") {
+		if (!isNaN(a) && !isNaN(b)) {
 
 			switch (operator) {
 				case "add":
@@ -93,20 +91,34 @@ document.addEventListener("DOMContentLoaded", (e) => {
 					break;
 
 				default:
-					throw new Error("operator not selected")
+					throw new Error("Operator is not selected")
 					break;
 			}
-		} else throw new Error("a or b is not a number");
+		} else throw new Error("One of the operands is not a number");
 
+		console.log(operationResult);
 		// debugger
-		// console.log("operationResult", operationResult);
-		// console.log(String(operationResult).length);
 
 
-		if (String(operationResult).length > 12) {
-			// debugger
-			operationResult = operationResult.toExponential(6)
+		// round long decimals
+		// convert large numbers in scientific notation
+
+		if (String(operationResult).length > displayMaxDigit) {
+			if (operationResult > 999999999999) {
+				operationResult = operationResult.toExponential(6)
+			} else {
+				let integerLength = String(parseInt(operationResult)).length
+				if (integerLength < displayMaxDigit) {
+					operationResult = operationResult.toFixed(displayMaxDigit - integerLength)
+				}
+			}
 		}
+
+
+
+		console.log(operationResult);
+
+
 
 		return operationResult
 	}
@@ -115,24 +127,27 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	digits.forEach(e => {
 		e.addEventListener('click', () => {
 
-			let digit = e.getAttribute("calc-digit")
-
 			if (buffer === undefined) {
 				buffer = ""
 			}
 
+			if (buffer.length > displayMaxDigit) {
+				return
+			}
 
-			// clear display after firts selected operator
-			// if (firstInputAfterOperator) {
-			// 	displayEl.innerHTML = ""
-			// 	buffer = ""
-			// 	firstInputAfterOperator = false
-			// }
+			let digit = e.getAttribute("calc-digit")
+
 
 			if (lastButtonTypePressed === "operator") {
 				displayEl.innerHTML = ""
 				buffer = ""
-				// firstInputAfterOperator = false
+			}
+
+			if (lastButtonTypePressed === "equal") {
+				displayPreviewEl.innerHTML = ""
+				displayEl.innerHTML = ""
+				buffer = ""
+				a = undefined
 			}
 
 			// prevents displayEl showing 00000

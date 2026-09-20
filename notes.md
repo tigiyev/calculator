@@ -18,6 +18,8 @@
 + 5-=+ 			(0)
 + 5-=+= 			(0)
 + 5*==			(125)
++ after calculation if new numbers is added clear preview
++ 1+2=5+5=		(10)
 
 
 ## Test. Negative
@@ -35,10 +37,11 @@ e.g 43 and -43 after clicking neg multiple times
 
 
 ## Test. Long numbers
-- how many digits is max? (12)
++ cant input digits more than display max
++ how many digits is max? (12)
 + 123456789*123456789= 			(1.524158e+16)
-- 1/3= 		(0.33333333333)
-- bug 0.2 + 0.1 = 0.3000000000000003
++ 1/3= 		(0.33333333333)
++ 1111/3=	(370.333333333) 
 
 
 ## Test. Decimal
@@ -47,13 +50,16 @@ e.g 43 and -43 after clicking neg multiple times
 - 1.0= 		(1)(preview 1=)
 - 1.000+ 	(1)(preview 1+)
 - 1+2=.		(0.)(preview empty)
+- bug 0.2 + 0.1 = 0.3000000000000003
 
 
 
 
 ## Todo
-- add negative
++ add negative
+- fix large numbers
 - add decimals
 - add backspace button
 - add tousand separator
 - add keyboard input
+- if devide to 0, display funny message

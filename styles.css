@@ -171,8 +171,8 @@ body {
   display: flex;
   justify-content: right;
   align-items: center;
-  font-size: 42px;
-  line-height: 42px;
+  font-size: 40px;
+  line-height: 40px;
   font-weight: bold;
 }
 .calc__inputs {

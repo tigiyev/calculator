@@ -134,7 +134,6 @@ body {
 	padding: 12px;
 
 	width: 340px;
-	// height: 440px;
 
 	font-family: monospace;
 	background: #292929;
@@ -146,7 +145,6 @@ body {
 	&__content {
 		display: flex;
 		flex-wrap: wrap;
-		// gap: 24px;
 	}
 
 	&__display {
@@ -177,7 +175,6 @@ body {
 			line-height: 18px;
 			min-height: 18px;
 
-			// height: 24px;
 			opacity: .75;
 			font-weight: lighter;
 			letter-spacing: -1px;
@@ -188,10 +185,8 @@ body {
 			display: flex;
 			justify-content: right;
 			align-items: center;
-			// height: 44px;
-
-			font-size: 42px;
-			line-height: 42px;
+			font-size: 40px;
+			line-height: 40px;
 			font-weight: bold;
 		}
 	}
