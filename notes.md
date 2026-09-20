@@ -36,13 +36,14 @@ e.g 43 and -43 after clicking neg multiple times
 
 
 
-## Test. Long numbers
+## Test. Long numbers (12 digits max)
 + cant input digits more than display max
-+ how many digits is max? (12)
 + 123456789*123456789= 			(1.524158e+16)
 + 1/3= 		(0.33333333333)
-+ 1111/3=	(370.333333333) 
-
++ 1111/3=	(370.333333333)
++ 555555555555/2 	(277777777778)
+~ 555555555555neg/2 	(-277777777778)
++ 555555555555neg*== 	(do not exceed max digit)
 
 ## Test. Decimal
 - 1..2		(1.2)

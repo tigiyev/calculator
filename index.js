@@ -96,29 +96,34 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			}
 		} else throw new Error("One of the operands is not a number");
 
-		console.log(operationResult);
+
+
+
 		// debugger
-
-
 		// round long decimals
 		// convert large numbers in scientific notation
 
 		if (String(operationResult).length > displayMaxDigit) {
-			if (operationResult > 999999999999) {
+			if (operationResult > 999999999999 || operationResult < -999999999999) {
 				operationResult = operationResult.toExponential(6)
 			} else {
+
 				let integerLength = String(parseInt(operationResult)).length
-				if (integerLength < displayMaxDigit) {
+
+				// let symbolCount = 0
+				// if (String(operationResult).includes(".")) { symbolCount++ }
+				// if (String(operationResult).includes("-")) { symbolCount++ }
+				// operationResult = operationResult.toFixed(displayMaxDigit - integerLength + symbolCount)
+
+				if (displayMaxDigit >= integerLength) {
 					operationResult = operationResult.toFixed(displayMaxDigit - integerLength)
+				} else {
+					operationResult = Math.round(operationResult)
 				}
+
 			}
+
 		}
-
-
-
-		console.log(operationResult);
-
-
 
 		return operationResult
 	}
@@ -126,12 +131,13 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	digits.forEach(e => {
 		e.addEventListener('click', () => {
+			// debugger
 
 			if (buffer === undefined) {
 				buffer = ""
 			}
 
-			if (buffer.length > displayMaxDigit) {
+			if (buffer.length >= displayMaxDigit) {
 				return
 			}
 
