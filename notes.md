@@ -46,19 +46,19 @@ e.g 43 and -43 after clicking neg multiple times
 + 555555555555neg*== 	(do not exceed max digit)
 
 ## Test. Decimal
-- 1..2		(1.2)
-- .2 			(0.2)
-- 1.0= 		(1)(preview 1=)
-- 1.000+ 	(1)(preview 1+)
-- 1+2=.		(0.)(preview empty)
-- bug 0.2 + 0.1 = 0.3000000000000003
++ 1..2		(1.2)
++ .2 			(0.2)
++ 1.0= 		(1)(preview 1=)
++ 1.000+ 	(1)(preview 1+)
++ 1+2=.		(0.)(preview empty)
++ bug 0.2 + 0.1 = 0.3000000000000003
 
 
 
 
 ## Todo
 + add negative
-- fix large numbers
++ fix large numbers
 - add decimals
 - add backspace button
 - add tousand separator

@@ -14,9 +14,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let lastButtonTypePressed
 	let previewIsNegated
 
-	let bufferHasDecimal = undefined
-	let decimalSymbol = "."
 	let displayMaxDigit = 12
+	// let decimalSymbol = "."
 	// if this going to change, have to make internal decimal convertor
 	// JS only works with .
 
@@ -121,6 +120,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 					operationResult = Math.round(operationResult)
 				}
 
+				// to convert 0.300000000000 to 0.3
+				operationResult = Number(operationResult)
+
 			}
 
 		}
@@ -182,6 +184,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 			if (buffer) {
 				updateOperands()
+
+				// for 1.0= 		(1)(preview 1=)
+				displayEl.innerHTML = a
 			}
 
 
@@ -215,18 +220,9 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			}
 
 
-			// clear prevB to solve bug when doing 1+2= + = (5 instead of 6)
-			// prevB = undefined
-
 			// update preview (after operator)
 			displayPreviewEl.innerHTML = a + " " + operatorSymbol
 
-
-			// if (buffer.includes(".")) {
-			// 	bufferHasDecimal = true
-			// } else if (!(buffer.includes("."))) {
-			// 	bufferHasDecimal = false
-			// } else bufferHasDecimal = undefined
 
 			lastButtonTypePressed = "operator"
 
@@ -237,12 +233,15 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	equal.addEventListener("click", () => {
 		// debugger
-		// console.log("equal is pressed");
 
 		if (buffer) {
 			// a + b
 
 			updateOperands()
+
+			// for 1.0= 		(1)(preview 1=)
+			displayEl.innerHTML = a
+			displayPreviewEl.innerHTML = a + " ="
 
 			if (!isNaN(a) && !isNaN(b) && operator) {
 
@@ -291,17 +290,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 			displayEl.innerHTML = answer
 			displayPreviewEl.innerHTML = prevA + " " + operatorSymbol + " " + prevB + " ="
 		}
-
-
-
-
-		// check if answer has decimal
-		if (answer && answer % 1 !== 0) {
-			bufferHasDecimal = true
-		} else if (answer && answer % 1 == 0) {
-			bufferHasDecimal = false
-		}
-		else bufferHasDecimal = undefined
 
 
 		lastButtonTypePressed = "equal"
@@ -355,37 +343,48 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	})
 
 
-
-
 	decimal.addEventListener("click", () => {
 
-
-		if (!bufferHasDecimal) {
-
-			// prevents bug when starting from typing . without 0
-			if (buffer === "") {
-				buffer = 0
-			}
-
-			displayEl.innerHTML = displayEl.innerHTML + decimalSymbol
-			buffer = buffer + decimalSymbol
-
-			bufferHasDecimal = true
-
-
-			// clear display after equal press .
-			if (lastButtonTypePressed === "equal") {
-				displayEl.innerHTML = "0."
-
-				// update preview (after decimal button)
-				displayPreviewEl.innerHTML = a + " " + operatorSymbol
-			}
-
+		if (lastButtonTypePressed === "operator") {
+			displayEl.innerHTML = ""
+			buffer = ""
 		}
 
+		if (lastButtonTypePressed === "equal") {
+			displayPreviewEl.innerHTML = ""
+			displayEl.innerHTML = ""
+			buffer = ""
+			a = undefined
+		}
+
+		if (buffer === undefined || buffer === "") {
+			buffer = "0."
+			displayEl.innerHTML = buffer
+		}
+
+		if (!buffer.includes(".")) {
+			buffer = buffer + "."
+			displayEl.innerHTML = buffer
+		}
+
+		lastButtonTypePressed = "digit"
 
 		testLog()
 	})
+
+
+
+
+
+	function updateOperands() {
+		if (a === undefined) {
+			a = Number(buffer)
+			buffer = undefined
+		} else {
+			b = Number(buffer)
+			buffer = undefined
+		}
+	}
 
 
 
@@ -403,7 +402,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		prevAnswer = undefined
 		displayEl.innerHTML = "0"
 		displayPreviewEl.innerHTML = ""
-		bufferHasDecimal = undefined
 		lastButtonTypePressed = undefined
 		previewIsNegated = undefined
 
@@ -411,17 +409,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	})
 
 
-	function updateOperands() {
 
-		if (a === undefined) {
-			a = Number(buffer)
-			buffer = undefined
-		} else {
-			b = Number(buffer)
-			buffer = undefined
-		}
-
-	}
 
 
 	function testLog() {
@@ -434,7 +422,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		console.log("prevAnswer: ", prevAnswer);
 		console.log("prevA: ", prevA);
 		console.log("prevB: ", prevB);
-		console.log("bufferHasDecimal: ", bufferHasDecimal);
 		console.log("displayPreviewEl.innerHTML: ", displayPreviewEl.innerHTML);
 		console.log("displayEl.innerHTML: ", displayEl.innerHTML);
 		console.log("lastButtonTypePressed: ", lastButtonTypePressed);
