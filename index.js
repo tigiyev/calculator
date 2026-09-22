@@ -29,17 +29,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let negative = document.querySelector("[calc-role='negative']")
 	let decimal = document.querySelector("[calc-role='decimal']")
 
-	// parseFloat does not convert to scientific notation
-	// what parseFloat do?
-
-
-
-	// let largeNumber = 1.524158e+16
-	// console.log(largeNumber);
-	// console.log(largeNumber.toExponential(6));
-	// console.log(parseFloat(largeNumber).toExponential(6));
-
-
 
 	testLog()
 
@@ -60,9 +49,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 	function operate(operator, a, b) {
 		// debugger
-		// b = "12"
-		// b = NaN
-		// operator = "asdasd"
 
 		let operationResult
 
@@ -87,6 +73,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 				case "division":
 					operationResult = division(a, b)
+					if (a === 0 || b === 0) { alert("~~~YOU DESTROYED THE FABRIC OF SPACETIME~~~") }
 					break;
 
 				default:
@@ -97,8 +84,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 
 
-
-		// debugger
 		// round long decimals
 		// convert large numbers in scientific notation
 
@@ -425,7 +410,6 @@ document.addEventListener("DOMContentLoaded", (e) => {
 		console.log("displayPreviewEl.innerHTML: ", displayPreviewEl.innerHTML);
 		console.log("displayEl.innerHTML: ", displayEl.innerHTML);
 		console.log("lastButtonTypePressed: ", lastButtonTypePressed);
-		// console.log("lastPreview: ", lastPreview);
 		console.log("--------------------------");
 	}
 

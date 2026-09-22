@@ -59,8 +59,8 @@ e.g 43 and -43 after clicking neg multiple times
 ## Todo
 + add negative
 + fix large numbers
-- add decimals
++ add decimals
 - add backspace button
 - add tousand separator
 - add keyboard input
-- if devide to 0, display funny message
++ if devide to 0, display funny message
