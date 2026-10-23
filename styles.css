@@ -156,8 +156,6 @@ body {
   align-content: center;
   align-items: center;
   width: 100%;
-  font-size: 32px;
-  line-height: 32px;
   text-align: right;
   border-radius: 4px;
   padding: 24px 8px;
@@ -183,8 +181,8 @@ body {
   display: flex;
   justify-content: right;
   align-items: center;
-  font-size: 40px;
-  line-height: 40px;
+  font-size: 36px;
+  line-height: 36px;
   font-weight: bold;
   background-color: transparent;
   color: #eeeeee;
