@@ -15,20 +15,19 @@
 
 
 
-		<div class="calc-wr">
-
+		<div class="calc-wr indent-6">
 			<div class="calc">
 				<div class="calc__content">
 					<div class="calc__display">
-
 						<div class="calc__display__preview"></div>
 						<div class="calc__display__content">0</div>
+						<!-- <input type="text" class="calc__display__content" value="0" autofocus> -->
 					</div>
 					<div class="calc__inputs">
 						<div class="calc__input-row">
 							<div class="calc__btn" calc-role="clear">AC</div>
 							<div class="calc__btn calc__btn_disabled"></div>
-							<div class="calc__btn calc__btn_disabled">←</div>
+							<div class="calc__btn" calc-role="backspace">←</div>
 							<div class="calc__btn" calc-operator="division">÷</div>
 						</div>
 						<div class="calc__input-row">
@@ -55,11 +54,28 @@
 							<div class="calc__btn calc__btn_number" calc-role="decimal">.</div>
 							<div class="calc__btn calc__btn_equal" calc-role="equal">=</div>
 						</div>
-
 					</div>
 				</div>
 			</div>
+
+
 		</div>
+
+		<div class="hr"></div>
+		<div class="desctiption">
+			<h1 class="indent-2">Basic Calculator</h1>
+			<h4>Supported features:</h4>
+			<ul>
+				<li>Positive and Negative numbers</li>
+				<li>Decimal numbers</li>
+				<li>Large and Small numbers</li>
+				<li>Devision, Multiplication, Addition, Subtraction operators</li>
+				<li>Backspace and Clear functions</li>
+				<li>Operator and Operands preview display</li>
+			</ul>
+		</div>
+
+
 
 	</div>
 

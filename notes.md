@@ -54,13 +54,33 @@ e.g 43 and -43 after clicking neg multiple times
 + bug 0.2 + 0.1 = 0.3000000000000003
 
 
+## Test. Keyboard support
++ on page start focus on input
+- when display shows 0, next inputed digit clears 0
+- number exceeds 12digits
+- input does not take Infiniti nor NaN, maybe switch it to input text
+- 0/5 and 5/0 gives input different results (0 and empty)
+- 5/0 	(NaN)
+
+
+## Reference calc
+! can I insert digit in the middle of the number? NO
+! can I delete digit in the middle of the number? NO
+! can I negate with the keyboard? NO
+! can I type decimal separator? YES
+! can I type operators using keyboard? YES
+! tousand separator works only on whole numper part
 
 
 ## Todo
 + add negative
 + fix large numbers
 + add decimals
-- add backspace button
-- add tousand separator
-- add keyboard input
 + if devide to 0, display funny message
++ add backspace button
+
+
+## Maybe
+- add keyboard support
+- write calc manual in HTML
+~ add tousand separator

@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 	let clear = document.querySelector("[calc-role='clear']")
 	let negative = document.querySelector("[calc-role='negative']")
 	let decimal = document.querySelector("[calc-role='decimal']")
+	let backspace = document.querySelector("[calc-role='backspace']")
 
 
 	testLog()
@@ -112,6 +113,11 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 		}
 
+
+		// debugger
+
+		operationResult = operationResult === Infinity ? NaN : operationResult;
+
 		return operationResult
 	}
 
@@ -153,6 +159,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
 				buffer = buffer + digit
 				displayEl.innerHTML = buffer
 			}
+
 
 			lastButtonTypePressed = "digit"
 
@@ -356,6 +363,98 @@ document.addEventListener("DOMContentLoaded", (e) => {
 
 		testLog()
 	})
+
+
+	backspace.addEventListener("click", () => {
+
+		// debugger
+
+		if (buffer === "" || buffer === 0) {
+			return
+		}
+		else if (buffer === undefined && a !== undefined && b === undefined && lastButtonTypePressed === "equal") {
+			displayPreviewEl.innerHTML = ""
+		}
+		else {
+			buffer = buffer.slice(0, buffer.length - 1)
+			displayEl.innerHTML = buffer
+
+			if (buffer.length === 0) {
+				buffer = "0"
+				displayEl.innerHTML = buffer
+			}
+		}
+
+		testLog()
+	})
+
+
+
+
+
+	// keyboard support. not implemented yet
+	// if going to work later on this
+	// change all displayEl.innerHTML to displayEl.value
+
+	// displayEl.addEventListener("keypress", (e) => {
+
+	// 	// debugger
+
+	// 	if (buffer === undefined) {
+	// 		buffer = ""
+	// 	}
+
+	// 	// if (buffer.length >= displayMa123xDigit) {
+	// 	// 	return
+	// 	// }
+
+	// 	// text
+	// 	// prevents displayEl showing 00000
+	// 	if (buffer == "0" && buffer.length == 1) {
+	// 		buffer = ""
+	// 		buffer = buffer + e.key
+	// 		displayEl.innerHTML = buffer
+
+	// 	} else {
+	// 		buffer = buffer + e.key
+	// 		displayEl.innerHTML = buffer
+	// 	}
+
+	// 	// any new inputed digit goes to the end of number
+
+
+	// 	// prevent exceding max character 
+	// 	// if (displayEl.innerHTML.length < displayMaxDigit) {
+	// 	// 	buffer = displayEl.innerHTML
+	// 	// }
+
+
+	// 	// prevent inputing non-number caracters 
+
+
+
+	// 	// let numberOfMinuses = displayEl.innerHTML.split("-").length - 1
+	// 	let numberOfDots = displayEl.innerHTML.split(".").length - 1
+
+	// 	let allowedCharacters = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."]
+	// 	if (!allowedCharacters.includes(e.key)) {
+	// 		e.preventDefault()
+	// 	}
+	// 	else if (numberOfDots > 1) {
+	// 		e.preventDefault()
+	// 	} else {
+	// 		buffer = displayEl.innerHTML
+	// 	}
+
+	// 	console.log("e.key: ", e.key);
+	// 	console.log("displayEl.innerHTML: ", displayEl.innerHTML);
+	// 	testLog()
+	// })
+
+
+	// displayEl.addEventListener("blur", () => {
+	// 	console.log("displayEl.innerHTML: ", displayEl.innerHTML);
+	// })
 
 
 

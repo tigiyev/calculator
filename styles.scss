@@ -127,20 +127,29 @@ body {
 
 .calc-wr {
 	padding: 64px;
+
+	@media screen and (max-width: 768px) {
+		padding: 0;
+		padding-top: var(--text-padding);
+		padding-bottom: var(--text-padding);
+
+	}
 }
 
 .calc {
 	margin: auto;
-	padding: 12px;
-
-	width: 340px;
-
+	padding: 8px;
+	width: 320px;
 	font-family: monospace;
-	background: #292929;
 	background: #202020;
 	color: #eeeeee;
 	border: 1px solid #2d2d2d;
 	border-radius: 8px;
+
+	@media screen and (max-width: 768px) {
+		width: 100%;
+		max-width: 320px;
+	}
 
 	&__content {
 		display: flex;
@@ -188,6 +197,27 @@ body {
 			font-size: 40px;
 			line-height: 40px;
 			font-weight: bold;
+
+			background-color: transparent;
+			color: #eeeeee;
+			font-family: monospace;
+			text-align: right;
+			padding: 0;
+			border: 0;
+			outline: 0;
+
+			/* Chrome, Safari, Edge, Opera */
+			&::-webkit-outer-spin-button,
+			&::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}
+
+			/* Firefox */
+			&[type=number] {
+				appearance: textfied;
+				-moz-appearance: textfield;
+			}
 		}
 	}
 
@@ -255,5 +285,19 @@ body {
 				background-color: unset;
 			}
 		}
+	}
+}
+
+.desctiption {
+	padding: 24px 0;
+	color: #aeaeae;
+
+	// ul {
+	// 	// padding: 0;
+	// 	// margin: 0;
+	// }
+
+	li {
+		margin-bottom: 4px;
 	}
 }
