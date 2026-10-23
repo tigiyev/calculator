@@ -206,14 +206,14 @@ body {
 			border: 0;
 			outline: 0;
 
-			/* Chrome, Safari, Edge, Opera */
+			// Chrome, Safari, Edge, Opera 
 			&::-webkit-outer-spin-button,
 			&::-webkit-inner-spin-button {
 				-webkit-appearance: none;
 				margin: 0;
 			}
 
-			/* Firefox */
+			// Firefox 
 			&[type=number] {
 				appearance: textfied;
 				-moz-appearance: textfield;
