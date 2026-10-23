@@ -264,3 +264,7 @@ body {
 .desctiption li {
   margin-bottom: 4px;
 }
+.desctiption a {
+  color: #4388f9;
+  text-decoration: none;
+}
